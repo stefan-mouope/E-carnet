@@ -1,83 +1,142 @@
-import { useState, useEffect } from 'react'; // Importer useEffect
-import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native'; // Importer ActivityIndicator
-import { useRouter, useLocalSearchParams } from 'expo-router';
+// patient-profile.tsx → VERSION FINALE, 0 ERREUR TS
+
+import { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { useRouter, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import Header from '@/components/Header';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Badge from '@/components/Badge';
-import { getPatientById, getConsultationsForPatient, updatePatient } from '@/services/api'; // Importer les fonctions API
-import { Patient, Consultation } from '@/types'; // Importer les types
 import { Calendar } from 'lucide-react-native';
+import { getPatientById, getConsultationsForPatient, updatePatient } from '@/services/api';
+import { Patient, Consultation } from '@/types';
 
 export default function PatientProfile() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const params = useLocalSearchParams<{ id: string; newConsultation?: string }>();
 
   const [patient, setPatient] = useState<Patient | null>(null);
   const [consultations, setConsultations] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState('');
-  const [age, setAge] = useState('');
-  const [weight, setWeight] = useState('');
-  const [height, setHeight] = useState('');
-  const [medicalHistory, setMedicalHistory] = useState('');
-  const [saving, setSaving] = useState(false); // État pour l'enregistrement des modifications
 
-  useEffect(() => {
-    if (!id) {
-      setError('ID du patient manquant.');
+  // États pour édition
+  const [nom, setNom] = useState('');
+  const [age, setAge] = useState('');
+  const [poids, setPoids] = useState('');
+  const [taille, setTaille] = useState('');
+  const [antecedents, setAntecedents] = useState('');
+  const [saving, setSaving] = useState(false);
+
+  const formatDate = (dateStr: string): string => {
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return 'Date invalide';
+    return date.toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  const loadData = async () => {
+    if (!params.id) {
+      setError('ID du patient manquant');
       setLoading(false);
       return;
     }
 
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const patientResponse = await getPatientById(id as string);
-        setPatient(patientResponse.patient);
-        setName(patientResponse.patient.name);
-        setAge(patientResponse.patient.age.toString());
-        setWeight(patientResponse.patient.weight.toString());
-        setHeight(patientResponse.patient.height.toString());
-        setMedicalHistory(patientResponse.patient.medicalHistory);
+    try {
+      setLoading(true);
 
-        const consultationsResponse = await getConsultationsForPatient(id as string);
-        setConsultations(consultationsResponse.consultations);
-      } catch (err: any) {
-        console.error("Failed to fetch patient data:", err);
-        setError(err.response?.data?.message || 'Erreur lors du chargement des données du patient.');
-        Alert.alert('Erreur', err.response?.data?.message || 'Erreur lors du chargement des données du patient.');
-      } finally {
-        setLoading(false);
+      // Charger le patient
+      const patientRes = await getPatientById(params.id);
+      const p: Patient = patientRes.patient;
+
+      setPatient(p);
+      setNom(p.nom);
+      setAge(p.age?.toString() ?? '');
+      setPoids(p.poids?.toString() ?? '');
+      setTaille(p.taille?.toString() ?? '');
+      setAntecedents(p.antecedents ?? '');
+
+      // Charger les consultations
+      const consRes = await getConsultationsForPatient(params.id);
+      const list: Consultation[] = consRes.consultations || [];
+
+      const formatted = list.map(c => ({
+        ...c,
+        date_consultation: formatDate(c.date_consultation),
+      }));
+
+      // Tri décroissant
+      formatted.sort((a, b) =>
+        new Date(b.date_consultation).getTime() - new Date(a.date_consultation).getTime()
+      );
+
+      setConsultations(formatted);
+    } catch (err: any) {
+      const msg = err.response?.data?.message || 'Erreur de chargement';
+      setError(msg);
+      Alert.alert('Erreur', msg);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [params.id]);
+
+  // Quand on revient après avoir ajouté une consultation
+  useFocusEffect(
+    useCallback(() => {
+      if (params.newConsultation) {
+        try {
+          const nouvelle: Consultation = JSON.parse(params.newConsultation);
+
+          const formatted: Consultation = {
+            ...nouvelle,
+            date_consultation: formatDate(nouvelle.date_consultation || nouvelle.createdAt || new Date().toISOString()),
+          };
+
+          setConsultations(prev => {
+            if (prev.some(c => c.id_consultation === formatted.id_consultation)) return prev;
+            return [formatted, ...prev];
+          });
+        } catch {
+          loadData();
+        }
       }
-    };
-    fetchData();
-  }, [id]);
+    }, [params.newConsultation])
+  );
 
   const handleSave = async () => {
     if (!patient) return;
-    setSaving(true); // Commencer l'enregistrement
+
+    setSaving(true);
     try {
-      const updatedPatientData = {
-        name,
-        age: parseInt(age),
-        weight: parseFloat(weight),
-        height: parseInt(height),
-        medicalHistory,
+      const updated = {
+        nom,
+        age: age ? Number(age) : null,
+        poids: poids ? Number(poids) : null,
+        taille: taille ? Number(taille) : null,
+        antecedents,
       };
-      const response = await updatePatient(patient.id, updatedPatientData);
-      setPatient(response.patient);
-      Alert.alert('Succès', 'Modifications enregistrées avec succès!');
+
+      await updatePatient(patient.id_patient.toString(), updated);
+
+      setPatient(prev => prev ? { ...prev, ...updated } : null);
+      Alert.alert('Succès', 'Modifications enregistrées !');
       setIsEditing(false);
     } catch (err: any) {
-      console.error("Failed to update patient data:", err);
-      Alert.alert('Erreur', err.response?.data?.message || 'Erreur lors de l\'enregistrement des modifications.');
+      Alert.alert('Erreur', err.response?.data?.message || 'Échec de la sauvegarde');
     } finally {
-      setSaving(false); // Arrêter l'enregistrement
+      setSaving(false);
     }
   };
 
@@ -85,12 +144,12 @@ export default function PatientProfile() {
     return (
       <View style={styles.container}>
         <Header title="Profil Patient" onBack={() => router.back()} />
-        <ActivityIndicator size="large" color={Colors.primary} style={styles.loadingIndicator} />
+        <ActivityIndicator size="large" color={Colors.primary} style={{ flex: 1 }} />
       </View>
     );
   }
 
-  if (error || !patient) {
+  if (!patient) {
     return (
       <View style={styles.container}>
         <Header title="Profil Patient" onBack={() => router.back()} />
@@ -104,14 +163,15 @@ export default function PatientProfile() {
   return (
     <View style={styles.container}>
       <Header title="Profil Patient" onBack={() => router.back()} />
-      <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
+        {/* En-tête */}
         <Card>
           <View style={styles.profileHeader}>
             <View>
-              <Text style={styles.patientName}>{patient.name}</Text>
-              <Text style={styles.patientCode}>{patient.uniqueCode}</Text>
+              <Text style={styles.patientName}>{patient.nom}</Text>
+              <Text style={styles.patientCode}>{patient.code_unique}</Text>
             </View>
-            <Badge text={patient.bloodType} variant="error" />
+            {patient.groupe_sanguin && <Badge text={patient.groupe_sanguin} variant="error" />}
           </View>
         </Card>
 
@@ -119,50 +179,39 @@ export default function PatientProfile() {
           <>
             <Card>
               <Text style={styles.sectionTitle}>Modifier les informations</Text>
-              <Input label="Nom complet" value={name} onChangeText={setName} />
-              <Input
-                label="Âge"
-                value={age}
-                onChangeText={setAge}
-                keyboardType="numeric"
-              />
-              <Input
-                label="Poids (kg)"
-                value={weight}
-                onChangeText={setWeight}
-                keyboardType="numeric"
-              />
-              <Input
-                label="Taille (cm)"
-                value={height}
-                onChangeText={setHeight}
-                keyboardType="numeric"
-              />
+              <Input label="Nom complet" value={nom} onChangeText={setNom} />
+              <Input label="Âge" value={age} onChangeText={setAge} keyboardType="numeric" />
+              <Input label="Poids (kg)" value={poids} onChangeText={setPoids} keyboardType="numeric" />
+              <Input label="Taille (cm)" value={taille} onChangeText={setTaille} keyboardType="numeric" />
               <Input
                 label="Antécédents médicaux"
-                value={medicalHistory}
-                onChangeText={setMedicalHistory}
+                value={antecedents}
+                onChangeText={setAntecedents}
                 multiline
                 numberOfLines={4}
                 style={styles.textArea}
               />
             </Card>
+
             <View style={styles.buttonsRow}>
               <Button
                 title="Annuler"
+                variant="outline"
                 onPress={() => {
                   setIsEditing(false);
-                  // Réinitialiser les états locaux avec les données du patient actuel
-                  setName(patient.name);
-                  setAge(patient.age.toString());
-                  setWeight(patient.weight.toString());
-                  setHeight(patient.height.toString());
-                  setMedicalHistory(patient.medicalHistory);
+                  setNom(patient.nom);
+                  setAge(patient.age?.toString() ?? '');
+                  setPoids(patient.poids?.toString() ?? '');
+                  setTaille(patient.taille?.toString() ?? '');
+                  setAntecedents(patient.antecedents ?? '');
                 }}
-                variant="outline"
               />
               <View style={styles.buttonSpacer} />
-              <Button title="Enregistrer" onPress={handleSave} disabled={saving} />
+              <Button
+                title={saving ? 'Enregistrement...' : 'Enregistrer'}
+                onPress={handleSave}
+                disabled={saving}
+              />
             </View>
           </>
         ) : (
@@ -170,106 +219,93 @@ export default function PatientProfile() {
             <Card>
               <Text style={styles.sectionTitle}>Informations physiques</Text>
               <View style={styles.infoRow}>
-                <Text style={styles.label}>Âge:</Text>
-                <Text style={styles.value}>{patient.age} ans</Text>
+                <Text style={styles.label}>Âge :</Text>
+                <Text style={styles.value}>{patient.age ?? '-'} ans</Text>
               </View>
               <View style={styles.infoRow}>
-                <Text style={styles.label}>Poids:</Text>
-                <Text style={styles.value}>{patient.weight} kg</Text>
+                <Text style={styles.label}>Poids :</Text>
+                <Text style={styles.value}>{patient.poids ?? '-'} kg</Text>
               </View>
               <View style={styles.infoRow}>
-                <Text style={styles.label}>Taille:</Text>
-                <Text style={styles.value}>{patient.height} cm</Text>
+                <Text style={styles.label}>Taille :</Text>
+                <Text style={styles.value}>{patient.taille ?? '-'} cm</Text>
               </View>
             </Card>
 
             <Card>
               <Text style={styles.sectionTitle}>Antécédents médicaux</Text>
-              <Text style={styles.historyText}>{patient.medicalHistory}</Text>
+              <Text style={styles.historyText}>
+                {patient.antecedents || 'Aucun antécédent renseigné'}
+              </Text>
             </Card>
 
             <Button title="Modifier les informations" onPress={() => setIsEditing(true)} />
 
             <Button
               title="Ajouter une consultation"
+              variant="secondary"
               onPress={() =>
                 router.push({
                   pathname: '/(doctor)/add-consultation',
-                  params: { patientId: patient.id, patientName: patient.name },
+                  params: {
+                    patientId: patient.id_patient.toString(),
+                    patientName: patient.nom,
+                  },
                 })
               }
-              variant="secondary"
             />
           </>
         )}
 
+       {/* Historique des consultations */}
         <Card>
           <Text style={styles.sectionTitle}>
             Historique des consultations ({consultations.length})
           </Text>
+
           {consultations.length === 0 ? (
-            <Text style={styles.emptyText}>Aucune consultation</Text>
+            <Text style={styles.emptyText}>Aucune consultation enregistrée</Text>
           ) : (
-            consultations.map((consultation) => (
-              <View key={consultation.id} style={styles.consultationItem}>
+            consultations.map((c, index) => (
+              <View key={c.id_consultation} style={styles.consultationItem}>
                 <View style={styles.consultationHeader}>
                   <Calendar size={16} color={Colors.primary} />
-                  <Text style={styles.consultationDate}>{consultation.date}</Text>
+                  <Text style={styles.consultationNumber}>
+                    Consultation #{consultations.length - index}
+                  </Text>
+                  <Text style={styles.consultationDate}> • {c.date_consultation}</Text>
                 </View>
-                <Text style={styles.consultationDiagnosis} numberOfLines={1}>
-                  {consultation.diagnosis}
-                </Text>
+
+                <Button
+                  title="Voir détails"
+                  onPress={() =>
+                    router.push({
+                      pathname: "/(doctor)/consultation-details",
+                      params: {
+                        consultationId: c.id_consultation.toString(),
+                        patientId: patient.id_patient.toString(),
+                        patientName: patient.nom,
+                      },
+                    })
+                  }
+                />
               </View>
             ))
           )}
         </Card>
+
       </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
-  content: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 24,
-  },
-  errorContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  errorText: {
-    fontSize: 16,
-    color: Colors.gray,
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  patientName: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 4,
-  },
-  patientCode: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primary,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 16,
-  },
+  container: { flex: 1, backgroundColor: Colors.background },
+  contentContainer: { padding: 24 },
+  profileHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  patientName: { fontSize: 24, fontWeight: '700', color: Colors.text, marginBottom: 4 },
+  patientCode: { fontSize: 14, fontWeight: '600', color: Colors.primary },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: Colors.text, marginBottom: 16 },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -277,59 +313,19 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: Colors.lightGray,
   },
-  label: {
-    fontSize: 14,
-    color: Colors.gray,
-  },
-  value: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
-  },
-  historyText: {
-    fontSize: 14,
-    color: Colors.text,
-    lineHeight: 22,
-  },
-  textArea: {
-    minHeight: 100,
-    textAlignVertical: 'top',
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  buttonSpacer: {
-    width: 12,
-  },
-  emptyText: {
-    fontSize: 14,
-    color: Colors.gray,
-    fontStyle: 'italic',
-  },
-  consultationItem: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.lightGray,
-  },
-  consultationHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    marginBottom: 4,
-  },
-  consultationDate: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: Colors.primary,
-  },
-  consultationDiagnosis: {
-    fontSize: 14,
-    color: Colors.text,
-  },
-  loadingIndicator: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+  label: { fontSize: 14, color: Colors.gray },
+  value: { fontSize: 14, fontWeight: '600', color: Colors.text },
+  historyText: { fontSize: 14, color: Colors.text, lineHeight: 22 },
+  textArea: { minHeight: 100, textAlignVertical: 'top' },
+  buttonsRow: { flexDirection: 'row', marginTop: 20, gap: 12 },
+  buttonSpacer: { width: 12 },
+  emptyText: { fontSize: 14, color: Colors.gray, fontStyle: 'italic', textAlign: 'center', marginTop: 20 },
+  consultationItem: { paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: Colors.lightGray },
+  consultationHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
+  consultationNumber: { fontSize: 13, fontWeight: '700', color: Colors.primary },
+  consultationDate: { fontSize: 13, color: Colors.gray },
+  consultationLabel: { fontSize: 12, color: Colors.gray, marginTop: 10, marginBottom: 4, fontWeight: '600' },
+  consultationText: { fontSize: 14, color: Colors.text, lineHeight: 20 },
+  errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { fontSize: 16, color: '#ef4444' },
 });

@@ -89,6 +89,7 @@ const loginUser = async (username, password, role) => {
     docteur = await DOCTEUR.findOne({ where: { id_user: authUser.id_user } });
     if (!docteur) throw new Error('Profil docteur introuvable');
     payload.id_docteur = docteur.id_docteur;
+    payload.nom = docteur.nom.trim();
   }
 
   if (role === 'PATIENT') {

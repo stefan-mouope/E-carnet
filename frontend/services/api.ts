@@ -106,10 +106,37 @@ export const login = async (username: string, password: string, role: 'doctor' |
   const endpoint = role === 'doctor' ? '/accounts/login_doctor' : '/accounts/login_patient';
   const response = await api.post(endpoint, { username, password });
   const { access_token, refresh_token } = response.data;
-  await AsyncStorage.setItem('accessToken', access_token);
-  await AsyncStorage.setItem('refreshToken', refresh_token);
+
+  await AsyncStorage.multiSet([
+    ['accessToken', access_token],
+    ['refreshToken', refresh_token || ''],
+    ['userRole', role],
+  ]);
+
+  // BONUS : on décode immédiatement pour stocker l'ID tout de suite
+  if (role === 'doctor') {
+    try {
+      const base64Url = access_token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(atob(base64));
+      if (payload.id_docteur) {
+        await AsyncStorage.setItem('doctorId', String(payload.id_docteur));
+      }
+    } catch (e) {
+      console.warn('Impossible de décoder le token au login');
+    }
+  }
+
   return response.data;
 };
+
+export const getUserRole = async (): Promise<'doctor' | 'patient' | null> => {
+  const role = await AsyncStorage.getItem('userRole');
+  return role as 'doctor' | 'patient' | null;
+};
+
+
+
 
 export const registerDoctor = async (nom: string, specialite: string, username: string, password: string) => {
   const response = await api.post('/accounts/register_doctor', { nom, specialite, username, password });
@@ -161,7 +188,7 @@ export const getDoctorPatients = async (): Promise<{ patients: Patient[] }> => {
 };
 
 
-export const getUserFromToken = async (): Promise<{ id: string; role: string } | null> => {
+export const getUserFromToken = async (): Promise<{ id: string; role: string; name: string } | null> => {
   try {
     const token = await AsyncStorage.getItem('accessToken');
     if (!token) return null;
@@ -173,6 +200,7 @@ export const getUserFromToken = async (): Promise<{ id: string; role: string } |
     return {
       id: payload.id_docteur?.toString(),  // CHANGEMENT ICI : id_docteur
       role: payload.role,
+      name: payload.nom,
     };
   } catch (error) {
     console.error('Erreur décodage token:', error);

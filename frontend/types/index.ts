@@ -14,19 +14,29 @@ export interface Patient {
   doctorId?: number;
 }
 
+// types.ts
 export interface Consultation {
-  id: string;
-  patientId: string;
-  patientName: string;
-  doctorId: string;
-  doctorName: string;
-  date: string;
-  symptoms: string;
-  diagnosis: string;
-  treatment: string;
-  prescription: string;
-  notes: string;
+  id_consultation: number;
+  date_consultation: string;
+  diagnostic: string;
+  symptomes: string;
+  traitement: string;
+  ordonnance?: string;
+  notes?: string;
+  patient_id: number;
+  docteur_id: number;
+  DOCTEUR?: {
+    nom: string;
+    specialite?: string;
+  };
+  PATIENT?: {
+    nom: string;
+    code_unique: string;
+  };
+  createdAt?: string;
+  updatedAt?: string;
 }
+
 
 export interface User {
   id: string;

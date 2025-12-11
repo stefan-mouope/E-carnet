@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import Card from '@/components/Card';
 import Button from '@/components/Button';
 import { Users, UserPlus, Calendar } from 'lucide-react-native';
-import { getDoctorPatients, getConsultationsForPatient } from '@/services/api';
+import { getDoctorPatients, getConsultationsForPatient, getUserFromToken } from '@/services/api';
 
 export type UserRole = 'patient' | 'doctor';
 
@@ -35,82 +35,95 @@ export interface Consultation {
   notes: string;
 }
 
-export interface User {
-  id: string;
-  username: string;
-  password: string;
-  role: UserRole;
-  name: string;
-  uniqueCode?: string;
-  patientData?: Patient;
-}
-
 export default function DoctorDashboard() {
   const router = useRouter();
-  const [doctorName, setDoctorName] = useState('Dr. Nom du Docteur');
+
+  const [doctorName, setDoctorName] = useState<string>('Dr. Nom du Docteur');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [recentConsultations, setRecentConsultations] = useState<Consultation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalConsultations, setTotalConsultations] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+  useFocusEffect(
+    useCallback(() => {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
 
-        const patientsResponse = await getDoctorPatients();
-        console.log('Patients trouvés:', patientsResponse.patients);
+          // Récupérer le docteur connecté
+          const currentDoctor = await getUserFromToken();
+          if (currentDoctor) {
+            setDoctorName(`Dr. ${currentDoctor.name ?? ''}`);
+          }
 
-        // Normalisation des patients
-        const normalizedPatients: Patient[] = patientsResponse.patients.map((p: any) => ({
-          id: String(p.id_patient),
-          name: p.nom,
-          age: p.age ?? 0,
-          weight: p.poids ?? 0,
-          height: p.taille ?? 0,
-          bloodType: p.groupe_sanguin ?? '',
-          medicalHistory: p.antecedents ?? '',
-          uniqueCode: p.code_unique,
-          createdAt: p.createdAt,
-        }));
-        setPatients(normalizedPatients);
-
-        // Récupérer les consultations récentes
-        let allConsultations: Consultation[] = [];
-        for (const patient of normalizedPatients) {
-          const consultsResponse = await getConsultationsForPatient(patient.id);
-          const normalizedConsults: Consultation[] = consultsResponse.consultations.map((c: any) => ({
-            id: String(c.id),
-            patientId: String(c.patient_id),
-            patientName: patient.name,
-            doctorId: String(c.doctor_id),
-            doctorName: c.doctorName ?? 'Dr.',
-            date: c.date,
-            symptoms: c.symptoms ?? '',
-            diagnosis: c.diagnosis ?? '',
-            treatment: c.treatment ?? '',
-            prescription: c.prescription ?? '',
-            notes: c.notes ?? '',
+          // Récupérer les patients
+          const patientsResponse = await getDoctorPatients();
+          const normalizedPatients: Patient[] = patientsResponse.patients.map((p: any) => ({
+            id: String(p.id_patient),
+            name: p.nom,
+            age: p.age ?? 0,
+            weight: p.poids ?? 0,
+            height: p.taille ?? 0,
+            bloodType: p.groupe_sanguin ?? '',
+            medicalHistory: p.antecedents ?? '',
+            uniqueCode: p.code_unique,
+            createdAt: p.createdAt,
           }));
-          allConsultations = [...allConsultations, ...normalizedConsults];
+
+          setPatients(normalizedPatients);
+
+          // Récupérer les consultations et les grouper par patient
+          const patientMap: Record<string, { latest: Consultation; count: number }> = {};
+
+          for (const patient of normalizedPatients) {
+            const consultsResponse = await getConsultationsForPatient(patient.id);
+            const normalizedConsults: Consultation[] = consultsResponse.consultations.map((c: any) => ({
+              id: String(c.id),
+              patientId: String(c.patient_id),
+              patientName: patient.name,
+              doctorId: String(c.doctor_id),
+              doctorName: c.doctorName ?? 'Dr.',
+              date: c.date,
+              symptoms: c.symptoms ?? '',
+              diagnosis: c.diagnosis ?? '',
+              treatment: c.treatment ?? '',
+              prescription: c.prescription ?? '',
+              notes: c.notes ?? '',
+            }));
+
+            if (normalizedConsults.length > 0) {
+              normalizedConsults.sort(
+                (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+              );
+
+              patientMap[patient.id] = {
+                latest: normalizedConsults[0],
+                count: normalizedConsults.length,
+              };
+            }
+          }
+
+          const total = Object.values(patientMap).reduce((acc, v) => acc + v.count, 0);
+          const recentGrouped: Consultation[] = Object.values(patientMap).map((v) => ({
+            ...v.latest,
+            diagnosis: `${v.latest.diagnosis} (${v.count} Consultation${v.count > 1 ? 's' : ''})`,
+          }));
+
+          setTotalConsultations(total);
+          setRecentConsultations(recentGrouped);
+        } catch (err: any) {
+          console.error(err);
+          setError(err.response?.data?.message || 'Erreur lors du chargement du tableau de bord.');
+          Alert.alert('Erreur', err.response?.data?.message || 'Erreur lors du chargement du tableau de bord.');
+        } finally {
+          setLoading(false);
         }
+      };
 
-        setRecentConsultations(
-          allConsultations
-            .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-            .slice(0, 3)
-        );
-      } catch (err: any) {
-        console.error('Failed to fetch doctor dashboard data:', err);
-        setError(err.response?.data?.message || 'Erreur lors du chargement du tableau de bord.');
-        Alert.alert('Erreur', err.response?.data?.message || 'Erreur lors du chargement du tableau de bord.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
+      fetchData();
+    }, [])
+  );
 
   const handleLogout = () => {
     router.replace('/login');
@@ -165,7 +178,7 @@ export default function DoctorDashboard() {
           <Card style={styles.statCard}>
             <View style={styles.statContent}>
               <Calendar size={32} color={Colors.secondary} />
-              <Text style={styles.statNumber}>{recentConsultations.length}</Text>
+              <Text style={styles.statNumber}>{totalConsultations}</Text>
               <Text style={styles.statLabel}>Consultations</Text>
             </View>
           </Card>
