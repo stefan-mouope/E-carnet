@@ -1,0 +1,233 @@
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { router } from 'expo-router';
+import { Patient } from '@/types';
+
+const getBaseUrl = () => {
+  // Si tu as défini une variable d'environnement (recommandé)
+  // if (process.env.EXPO_PUBLIC_API_URL) {
+  //   return process.env.EXPO_PUBLIC_API_URL;
+  // }
+  console.log('fjfjkdjfkjsdkjfksdj')
+
+  // Téléphone physique Android OU iOS → il faut l'IP de ta machine
+  return 'http://192.168.0.110:3000/api'; // ← Remplace par TON IP locale
+};
+
+const API_BASE_URL = getBaseUrl();
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    'Content-Type': 'application/json',
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache',
+  },
+});
+
+let isRefreshing = false;
+let failedQueue: { resolve: (value?: unknown) => void; reject: (reason?: any) => void; config: any; }[] = [];
+
+const processQueue = (error: any, token = null) => {
+  failedQueue.forEach(prom => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+api.interceptors.request.use(
+  async (config) => {
+    const accessToken = await AsyncStorage.getItem('accessToken');
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        return new Promise(function(resolve, reject) {
+          failedQueue.push({ resolve, reject, config: originalRequest });
+        }).then(token => {
+          originalRequest.headers.Authorization = 'Bearer ' + token;
+          return axios(originalRequest);
+        }).catch(err => {
+          return Promise.reject(err);
+        });
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refreshToken = await AsyncStorage.getItem('refreshToken');
+      if (!refreshToken) {
+        // Pas de refresh token, déconnexion
+        await logout();
+        return Promise.reject(error);
+      }
+
+      try {
+        const response = await axios.post(`${API_BASE_URL}/refresh-token`, { refreshToken }); // Endpoint à créer dans le backend si non existant
+        const { access_token, refresh_token } = response.data;
+
+        await AsyncStorage.setItem('accessToken', access_token);
+        await AsyncStorage.setItem('refreshToken', refresh_token);
+
+        api.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+        processQueue(null, access_token);
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        await logout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
+
+export const login = async (username: string, password: string, role: 'doctor' | 'patient') => {
+  const endpoint = role === 'doctor' ? '/accounts/login_doctor' : '/accounts/login_patient';
+  const response = await api.post(endpoint, { username, password });
+  const { access_token, refresh_token } = response.data;
+  await AsyncStorage.setItem('accessToken', access_token);
+  await AsyncStorage.setItem('refreshToken', refresh_token);
+  return response.data;
+};
+
+export const registerDoctor = async (nom: string, specialite: string, username: string, password: string) => {
+  const response = await api.post('/accounts/register_doctor', { nom, specialite, username, password });
+  return response.data;
+};
+
+export const createPatient = async (patientData: any, username: string, password: string) => {
+  const user = await getUserFromToken();
+
+  if (!user || user.role !== 'DOCTEUR') {
+    throw new Error('Vous devez être connecté en tant que médecin pour créer un patient.');
+  }
+
+  const payload = {
+    ...patientData,
+    username,
+    password,
+  };
+
+  console.log('Payload envoyé au backend →', payload); // tu verras doctorId: "1"
+
+  const response = await api.post('/accounts/create_patient', payload);
+  return response.data;
+};
+
+
+export const getDoctorPatients = async (): Promise<{ patients: Patient[] }> => {
+  try {
+    const response = await api.get('/patients/doctor/me');
+    console.log('RAW RESPONSE from /patients/doctor/me:', response.data);
+
+    // NORMALISATION FORCÉE – on accepte TOUTES les formes possibles
+    let patients: Patient[] = [];
+
+    if (Array.isArray(response.data)) {
+      patients = response.data;
+    } else if (response.data?.patients && Array.isArray(response.data.patients)) {
+      patients = response.data.patients;
+    } else if (response.data?.data?.patients) {
+      patients = response.data.data.patients;
+    }
+
+    console.log('Patients normalisés →', patients.length, 'patients trouvés');
+    return { patients };
+  } catch (err: any) {
+    console.error('ERREUR getDoctorPatients:', err.response?.data || err);
+    throw err;
+  }
+};
+
+
+export const getUserFromToken = async (): Promise<{ id: string; role: string } | null> => {
+  try {
+    const token = await AsyncStorage.getItem('accessToken');
+    if (!token) return null;
+
+    const payload = parseJwt(token);
+
+    console.log('Token décodé :', payload); // déjà présent → super utile
+
+    return {
+      id: payload.id_docteur?.toString(),  // CHANGEMENT ICI : id_docteur
+      role: payload.role,
+    };
+  } catch (error) {
+    console.error('Erreur décodage token:', error);
+    return null;
+  }
+};
+
+function parseJwt(token: string) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    return {};
+  }
+}
+
+
+
+export const getPatientById = async (id: string) => {
+  const response = await api.get(`/patients/${id}`);
+  return response.data;
+};
+
+export const getPatientMe = async (uniqueCode: string) => {
+  const response = await api.get(`/patients/me?code_unique=${uniqueCode}`);
+  return response.data;
+};
+
+export const updatePatient = async (id: string, patientData: any) => {
+  const response = await api.put(`/patients/${id}/update`, patientData);
+  return response.data;
+};
+
+export const createConsultation = async (consultationData: any) => {
+  const response = await api.post('/consultations/create', consultationData);
+  return response.data;
+};
+
+export const getConsultationsForPatient = async (patientId: string) => {
+  const response = await api.get(`/consultations/${patientId}/list`);
+  return response.data;
+};
+
+export const logout = async () => {
+  await AsyncStorage.removeItem('accessToken');
+  await AsyncStorage.removeItem('refreshToken');
+  // Rediriger vers l'écran de connexion
+  router.replace('/login');
+};
+
+export default api;
