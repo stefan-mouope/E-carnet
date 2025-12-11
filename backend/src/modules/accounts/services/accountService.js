@@ -75,29 +75,24 @@ const registerDoctor = async (nom, specialite, username, password) => {
  * Authentification d'un utilisateur (docteur ou patient)
  */
 const loginUser = async (username, password, role) => {
-  const authUser = await AUTHUSER.findOne({
-    where: { username, role },
-  });
-
-  if (!authUser) {
-    throw new Error('Nom d’utilisateur ou mot de passe invalide');
-  }
+  const authUser = await AUTHUSER.findOne({ where: { username, role } });
+  if (!authUser) throw new Error('Nom d’utilisateur ou mot de passe invalide');
 
   const isMatch = await comparePassword(password, authUser.password);
-  if (!isMatch) {
-    throw new Error('Nom d’utilisateur ou mot de passe invalide');
-  }
+  if (!isMatch) throw new Error('Nom d’utilisateur ou mot de passe invalide');
 
   let payload = { id_user: authUser.id_user, role: authUser.role };
+  let patient = null;
+  let docteur = null;
 
   if (role === 'DOCTEUR') {
-    const docteur = await DOCTEUR.findOne({ where: { id_user: authUser.id_user } });
+    docteur = await DOCTEUR.findOne({ where: { id_user: authUser.id_user } });
     if (!docteur) throw new Error('Profil docteur introuvable');
     payload.id_docteur = docteur.id_docteur;
   }
 
   if (role === 'PATIENT') {
-    const patient = await PATIENT.findOne({ where: { id_user: authUser.id_user } });
+    patient = await PATIENT.findOne({ where: { id_user: authUser.id_user } });
     if (!patient) throw new Error('Profil patient introuvable');
     payload.id_patient = patient.id_patient;
     payload.code_unique = patient.code_unique;
@@ -106,7 +101,7 @@ const loginUser = async (username, password, role) => {
   const accessToken = jwt.sign(payload, config.jwtSecret, { expiresIn: config.jwtAccessExpires });
   const refreshToken = jwt.sign({ id_user: authUser.id_user }, config.jwtSecret, { expiresIn: config.jwtRefreshExpires });
 
-  return { authUser, accessToken, refreshToken };
+  return { authUser, accessToken, refreshToken, patient, docteur };
 };
 
 
@@ -123,25 +118,28 @@ const createPatient = async (patientData, username, password) => {
     role: 'PATIENT',
   });
 
-  // Générer un code unique
-  let code_unique;
-  let isUnique = false;
-  while (!isUnique) {
-    code_unique = generateUniqueCode();
-    const existing = await PATIENT.findOne({ where: { code_unique } });
-    if (!existing) isUnique = true;
+  // ⚠️ ICI : On utilise le code_unique envoyé par le front
+  const { code_unique } = patientData;
+
+  if (!code_unique) {
+    throw new Error("code_unique manquant dans le front");
   }
 
-  // Créer le patient et l'associer au docteur
+  // Vérifier si le code existe déjà
+  const existing = await PATIENT.findOne({ where: { code_unique } });
+  if (existing) {
+    throw new Error("Ce code_unique existe déjà");
+  }
+
+  // Créer le patient avec le code du front
   const patient = await PATIENT.create({
     ...patientData,
-    code_unique,
     id_user: authUser.id_user,
-    doctorId: patientData.doctorId, // DOCTEUR connecté
   });
 
   return { patient, authUser };
 };
+
 
 module.exports = {
   hashPassword,

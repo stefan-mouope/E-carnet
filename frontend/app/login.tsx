@@ -5,8 +5,8 @@ import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Header from '@/components/Header';
-import { login } from '@/services/api'; // Importez la fonction de connexion
-// import { fakeDoctorUser, fakePatientUser } from '@/mock/data'; // Suppression des données mockées
+import { login } from '@/services/api'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -31,7 +31,7 @@ export default function LoginScreen() {
       } else {
         // Pour les patients, nous pourrions avoir besoin de stocker le uniqueCode pour getPatientMe
         // Cela devrait être géré après la connexion, en récupérant les données du patient
-        router.replace('/(patient)/dashboard');
+        router.replace(`/(patient)/VerifyCodeScreen?id_patient=${response.id_patient}`);
       }
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || 'Une erreur est survenue lors de la connexion.';

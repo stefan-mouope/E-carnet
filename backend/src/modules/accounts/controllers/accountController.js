@@ -59,23 +59,34 @@ const loginDoctor = async (req, res) => {
  */
 const loginPatient = async (req, res) => {
   try {
+    // Validation du body
     const { error } = loginSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
 
     const { username, password } = req.body;
-    const { authUser, accessToken, refreshToken } = await accountService.loginUser(username, password, 'PATIENT');
+
+    // On récupère authUser, tokens et patient directement depuis le service
+    const { authUser, accessToken, refreshToken, patient } = await accountService.loginUser(username, password, 'PATIENT');
+
+    if (!patient) {
+      // Cas improbable si le patient n'existe pas malgré le login réussi
+      return res.status(404).json({ message: 'Profil patient introuvable.' });
+    }
 
     res.status(200).json({
       message: 'Patient logged in successfully',
       access_token: accessToken,
-      refresh_token: refreshToken
+      refresh_token: refreshToken,
+      id_patient: patient.id_patient,
+      code_unique: patient.code_unique
     });
   } catch (err) {
     res.status(401).json({ message: err.message });
   }
 };
+
 
 /**
  * Création d'un patient (lié automatiquement au docteur connecté)

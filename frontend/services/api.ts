@@ -213,6 +213,19 @@ export const updatePatient = async (id: string, patientData: any) => {
   return response.data;
 };
 
+
+
+export const verifyPatientCode = async (id_patient: string, code_unique: string) => {
+  try {
+    const response = await api.post('/patients/verify-code', { id_patient, code_unique });
+    return response.data; // renvoie le patient + consultations si ok
+  } catch (err: any) {
+    console.error('Erreur verifyPatientCode:', err.response?.data || err);
+    throw new Error(err.response?.data?.message || 'Impossible de vérifier le code unique');
+  }
+};
+
+
 export const createConsultation = async (consultationData: any) => {
   const response = await api.post('/consultations/create', consultationData);
   return response.data;
