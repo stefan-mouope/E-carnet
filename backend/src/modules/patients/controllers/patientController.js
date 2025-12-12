@@ -100,11 +100,41 @@ const verifyPatientCode = async (req, res) => {
 
 
 
+const searchPatientByCode = async (req, res) => {
+  try {
+    const { code_unique } = req.body;
+
+    if (!code_unique) {
+      return res.status(400).json({ message: 'code_unique manquant' });
+    }
+
+    // Recherche globale (pas filtrée par docteur)
+    const patient = await PATIENT.findOne({
+      where: { code_unique },
+      attributes: ['id_patient', 'nom', 'age', 'poids', 'taille', 'groupe_sanguin', 'antecedents', 'code_unique', 'createdAt'],  // Champs utiles pour le frontend
+    });
+
+    if (!patient) {
+      return res.status(404).json({ message: 'Patient non trouvé avec ce code' });
+    }
+
+    return res.status(200).json({ patient });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Erreur serveur lors de la recherche' });
+  }
+};
+
+
+
+
+
 module.exports = {
   updatePatient,
   getPatientMe,
   getPatientById,
   getDoctorPatients,
-  verifyPatientCode
+  verifyPatientCode,
+  searchPatientByCode
 };
 

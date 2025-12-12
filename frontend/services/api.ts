@@ -11,7 +11,7 @@ const getBaseUrl = () => {
   console.log('fjfjkdjfkjsdkjfksdj')
 
   // Téléphone physique Android OU iOS → il faut l'IP de ta machine
-  return 'http://192.168.0.110:3000/api'; // ← Remplace par TON IP locale
+  return 'http://192.168.1.172:3000/api'; // ← Remplace par TON IP locale
 };
 
 const API_BASE_URL = getBaseUrl();
@@ -263,6 +263,41 @@ export const getConsultationsForPatient = async (patientId: string) => {
   const response = await api.get(`/consultations/${patientId}/list`);
   return response.data;
 };
+
+
+// api.ts
+
+// api.ts
+export const searchPatientByCode = async (code_unique: string) => {
+  try {
+    const response = await api.post('/patients/search-by-code', { code_unique });
+
+    const p = response.data.patient;
+
+    // On retourne exactement le même format que les autres endpoints
+    // → ton frontend sait déjà gérer id_patient, nom, code_unique, etc.
+    const patient: Patient = {
+      id_patient: p.id_patient,
+      id_user: p.id_user || 0,
+      nom: p.nom,
+      prenom: p.prenom,
+      code_unique: p.code_unique,
+      age: p.age ?? null,
+      poids: p.poids ?? null,
+      taille: p.taille ?? null,
+      groupe_sanguin: p.groupe_sanguin ?? null,
+      antecedents: p.antecedents ?? null,
+      doctorId: p.doctorId,
+    };
+
+    return { patient };
+  } catch (err: any) {
+    console.error('Erreur searchPatientByCode:', err.response?.data || err);
+    throw err;
+  }
+};
+
+
 
 export const logout = async () => {
   await AsyncStorage.removeItem('accessToken');

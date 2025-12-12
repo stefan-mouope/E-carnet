@@ -34,11 +34,7 @@ const handleSave = async () => {
   setLoading(true);
   try {
     const doctorId = await getDoctorIdFromToken();
-    if (!doctorId) {
-      Alert.alert('Erreur', 'Impossible de récupérer l’ID du docteur.');
-      setLoading(false);
-      return;
-    }
+    if (!doctorId) throw new Error('Docteur non identifié');
 
     const consultationData = {
       patient_id: patientId,
@@ -49,30 +45,33 @@ const handleSave = async () => {
       notes,
     };
 
-    // Assure-toi que ton API renvoie la consultation créée !
     const response = await createConsultation(consultationData);
 
-    Alert.alert(
-      'Succès',
-      'Consultation enregistrée avec succès!',
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            // Retourner la consultation créée à la page précédente
-            router.back();
-            router.setParams({ newConsultation: JSON.stringify(response.consultation) });
-          },
+    // LA CONSULTATION CRÉÉE DOIT ÊTRE RENVOYÉE PAR TON API
+    const newConsultation = response.consultation || response.data;
+
+    Alert.alert('Succès', 'Consultation enregistrée !', [
+      {
+        text: 'OK',
+        onPress: () => {
+          // ON RETOURNE EN PASSANT LA NOUVELLE CONSULTATION DANS LES PARAMS
+          router.replace({
+            pathname: '/(doctor)/patient-profile',
+            params: {
+              id: patientId as string,
+              newConsultation: JSON.stringify(newConsultation), // <-- C'EST ÇA QUI MARCHE
+            },
+          });
         },
-      ]
-    );
+      },
+    ]);
   } catch (error: any) {
-    console.error("Failed to create consultation:", error);
-    Alert.alert('Erreur', error.response?.data?.message || 'Erreur lors de l\'enregistrement.');
+    Alert.alert('Erreur', error.response?.data?.message || 'Échec de l’enregistrement');
   } finally {
     setLoading(false);
   }
 };
+
 
   return (
     <View style={styles.container}>
