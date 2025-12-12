@@ -2,7 +2,7 @@ const app = require('./app');
 const sequelize = require('./config/database');
 const models = require('./models'); // Assure-toi d'importer tous les modèles
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
   try {

@@ -11,11 +11,11 @@ export default function OnboardingScreen() {
       <View style={styles.content}>
         <View style={styles.logoContainer}>
           <View style={styles.logoPlaceholder}>
-            <Text style={styles.logoText}>E-Carnet</Text>
+            <Text style={styles.logoText}>Topitoh</Text>
           </View>
         </View>
 
-        <Text style={styles.title}>E-Carnet</Text>
+        <Text style={styles.title}>Topitoh</Text>
         <Text style={styles.subtitle}>Votre carnet médical numérique.</Text>
 
         <View style={styles.buttonsContainer}>

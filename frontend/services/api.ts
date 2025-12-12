@@ -11,7 +11,7 @@ const getBaseUrl = () => {
   console.log('fjfjkdjfkjsdkjfksdj')
 
   // Téléphone physique Android OU iOS → il faut l'IP de ta machine
-  return 'http://192.168.1.172:3000/api'; // ← Remplace par TON IP locale
+  return 'http://192.168.0.110:3000/api'; // ← Remplace par TON IP locale
 };
 
 const API_BASE_URL = getBaseUrl();

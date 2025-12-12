@@ -1,6 +1,6 @@
-# E-Carnet Backend
+# Topitoh Backend
 
-Ce projet est le backend de l'application mobile E-Carnet, développé avec Node.js, Express, Sequelize et PostgreSQL.
+Ce projet est le backend de l'application mobile Topitoh, développé avec Node.js, Express, Sequelize et PostgreSQL.
 
 ## Configuration
 
@@ -8,7 +8,7 @@ Ce projet est le backend de l'application mobile E-Carnet, développé avec Node
 
     ```bash
     git clone <URL_DU_DEPOT>
-    cd E-carnet
+    cd Topitoh
     ```
 
 2.  **Installer les dépendances**
