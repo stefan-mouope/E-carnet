@@ -123,7 +123,7 @@ export default function OnboardingScreen() {
             <Text style={styles.footerBadgeText}>🌺 France</Text>
           </View>
         </View>
-        <Text style={styles.footerText}>© 2024 Topitho- Tous droits réservés</Text>
+        <Text style={styles.footerText}>© 2025 Topitho- Tous droits réservés</Text>
       </View>
     </ScrollView>
   );
