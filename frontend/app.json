@@ -27,11 +27,12 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "2a10aba2-a065-4da2-8e69-4fc28596c561"
+        "projectId": "07f23fb7-e66e-4ac8-9c77-791bcd925545"
       }
     },
     "android": {
       "package": "com.sandjonyves.Topitoh"
-    }
+    },
+    "owner": "mouope"
   }
 }

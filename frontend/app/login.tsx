@@ -57,113 +57,132 @@ export default function LoginScreen() {
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
       >
-        {/* LOGO / TITRE */}
+        {/* HEADER CHALEUREUX */}
         <View style={styles.header}>
-          <View style={styles.logoContainer}>
+          <View style={styles.logoWrapper}>
+            <View style={styles.logoGlow} />
             <View style={styles.logoCircle}>
-              <Stethoscope size={40} color={Colors.primary} strokeWidth={2} />
+              <Stethoscope size={44} color="#ffffff" strokeWidth={2.5} />
             </View>
           </View>
-          <Text style={styles.title}>Bienvenue</Text>
+          <Text style={styles.title}>Ravi de vous revoir ! 👋</Text>
           <Text style={styles.subtitle}>
-            Connectez-vous pour accéder à votre espace
+            Connectez-vous pour accéder à vos services médicaux
           </Text>
         </View>
 
-        {/* SÉLECTEUR DE RÔLE */}
-        <View style={styles.roleSelectorContainer}>
-          <Text style={styles.sectionLabel}>Je suis</Text>
-          <View style={styles.roleSelector}>
+        {/* SÉLECTEUR DE RÔLE MODERNE */}
+        <View style={styles.roleSection}>
+          <Text style={styles.roleLabel}>Vous êtes :</Text>
+          <View style={styles.roleContainer}>
             <TouchableOpacity
-              style={[styles.roleButton, role === 'patient' && styles.roleButtonActive]}
+              style={[styles.roleCard, role === 'patient' && styles.roleCardActive]}
               onPress={() => setRole('patient')}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
-              <View style={[styles.roleIcon, role === 'patient' && styles.roleIconActive]}>
-                <User 
-                  size={24} 
-                  color={role === 'patient' ? 'white' : Colors.gray}
-                  strokeWidth={2}
-                />
+              <View style={styles.roleContent}>
+                <View style={[styles.roleIconCircle, role === 'patient' && styles.roleIconActive]}>
+                  <User 
+                    size={28} 
+                    color={role === 'patient' ? '#ffffff' : '#94a3b8'}
+                    strokeWidth={2.5}
+                  />
+                </View>
+                <Text style={[styles.roleTitle, role === 'patient' && styles.roleTitleActive]}>
+                  Patient
+                </Text>
+                {role === 'patient' && <Text style={styles.roleSubtitle}>Gérer ma santé</Text>}
               </View>
-              <Text style={[styles.roleText, role === 'patient' && styles.roleTextActive]}>
-                Patient
-              </Text>
               {role === 'patient' && (
-                <View style={styles.checkMark}>
-                  <Text style={styles.checkMarkText}>✓</Text>
+                <View style={styles.activeIndicator}>
+                  <Text style={styles.checkIcon}>✓</Text>
                 </View>
               )}
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.roleButton, role === 'doctor' && styles.roleButtonActive]}
+              style={[styles.roleCard, role === 'doctor' && styles.roleCardActive]}
               onPress={() => setRole('doctor')}
-              activeOpacity={0.7}
+              activeOpacity={0.8}
             >
-              <View style={[styles.roleIcon, role === 'doctor' && styles.roleIconActive]}>
-                <Stethoscope 
-                  size={24} 
-                  color={role === 'doctor' ? 'white' : Colors.gray}
-                  strokeWidth={2}
-                />
+              <View style={styles.roleContent}>
+                <View style={[styles.roleIconCircle, role === 'doctor' && styles.roleIconActive]}>
+                  <Stethoscope 
+                    size={28} 
+                    color={role === 'doctor' ? '#ffffff' : '#94a3b8'}
+                    strokeWidth={2.5}
+                  />
+                </View>
+                <Text style={[styles.roleTitle, role === 'doctor' && styles.roleTitleActive]}>
+                  Médecin
+                </Text>
+                {role === 'doctor' && <Text style={styles.roleSubtitle}>Espace pro</Text>}
               </View>
-              <Text style={[styles.roleText, role === 'doctor' && styles.roleTextActive]}>
-                Docteur
-              </Text>
               {role === 'doctor' && (
-                <View style={styles.checkMark}>
-                  <Text style={styles.checkMarkText}>✓</Text>
+                <View style={styles.activeIndicator}>
+                  <Text style={styles.checkIcon}>✓</Text>
                 </View>
               )}
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* FORMULAIRE DE CONNEXION */}
-        <View style={styles.formCard}>
-          <Text style={styles.sectionLabel}>Informations de connexion</Text>
+        {/* FORMULAIRE COLORÉ */}
+        <View style={styles.formContainer}>
+          <View style={styles.formHeader}>
+            <View style={styles.formIconBox}>
+              <Lock size={18} color="#10b981" />
+            </View>
+            <Text style={styles.formTitle}>Connexion sécurisée</Text>
+          </View>
           
-          <View style={styles.inputContainer}>
-            <View style={styles.inputIcon}>
-              <Mail size={20} color={Colors.gray} />
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Identifiant</Text>
+            <View style={styles.inputWrapper}>
+              <View style={styles.inputIconContainer}>
+                <Mail size={20} color="#6366f1" />
+              </View>
+              <Input
+                label=""
+                placeholder="Votre nom d'utilisateur"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+                style={styles.styledInput}
+              />
             </View>
-            <Input
-              label=""
-              placeholder="Nom d'utilisateur"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-              style={styles.input}
-            />
           </View>
 
-          <View style={styles.inputContainer}>
-            <View style={styles.inputIcon}>
-              <Lock size={20} color={Colors.gray} />
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Mot de passe</Text>
+            <View style={styles.inputWrapper}>
+              <View style={styles.inputIconContainer}>
+                <Lock size={20} color="#6366f1" />
+              </View>
+              <Input
+                label=""
+                placeholder="••••••••"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.styledInput}
+              />
             </View>
-            <Input
-              label=""
-              placeholder="Mot de passe"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              style={styles.input}
-            />
           </View>
 
-          {/* INFO POUR PATIENT */}
+          {/* INFO PATIENT */}
           {role === 'patient' && (
-            <View style={styles.infoBox}>
+            <View style={styles.patientInfo}>
+              <Text style={styles.infoIcon}>💡</Text>
               <Text style={styles.infoText}>
-                ℹ️ Après connexion, vous devrez saisir votre code unique pour accéder à votre dossier médical
+                Un code unique vous sera demandé après connexion pour accéder à votre dossier
               </Text>
             </View>
           )}
 
-          {/* BOUTON DE CONNEXION */}
+          {/* BOUTON */}
           <Button 
-            title={loading ? 'Connexion en cours...' : 'Se connecter'} 
+            title={loading ? '⏳ Connexion...' : '🔓 Me connecter'} 
             onPress={handleLogin} 
             disabled={loading}
             style={styles.loginButton}
@@ -171,21 +190,21 @@ export default function LoginScreen() {
 
           {loading && (
             <ActivityIndicator 
-              size="small" 
-              color={Colors.primary} 
-              style={styles.loader} 
+              size="large" 
+              color="#6366f1" 
+              style={styles.loadingSpinner} 
             />
           )}
         </View>
 
         {/* AIDE */}
-        <View style={styles.helpContainer}>
-          <Text style={styles.helpText}>
-            Besoin d'aide pour vous connecter ?
-          </Text>
-          <TouchableOpacity>
-            <Text style={styles.helpLink}>Contactez le support</Text>
-          </TouchableOpacity>
+        <View style={styles.supportSection}>
+          <View style={styles.supportCard}>
+            <Text style={styles.supportQuestion}>Besoin d'aide ?</Text>
+            <TouchableOpacity style={styles.supportButton}>
+              <Text style={styles.supportButtonText}>💬 Contacter le support</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -195,7 +214,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#f0f9ff',
   },
   
   content: {
@@ -203,194 +222,293 @@ const styles = StyleSheet.create({
   },
   
   contentContainer: {
-    padding: 24,
+    padding: 20,
     paddingBottom: 40,
   },
 
   header: {
     alignItems: 'center',
     marginBottom: 32,
-    marginTop: 20,
+    marginTop: 10,
   },
 
-  logoContainer: {
+  logoWrapper: {
+    position: 'relative',
     marginBottom: 20,
+  },
+
+  logoGlow: {
+    position: 'absolute',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#6366f1',
+    opacity: 0.2,
+    top: -10,
+    left: -10,
   },
 
   logoCircle: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#eff6ff',
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: Colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
   },
 
   title: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: Colors.text,
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1e293b',
     marginBottom: 8,
-  },
-
-  subtitle: {
-    fontSize: 16,
-    color: Colors.gray,
     textAlign: 'center',
   },
 
-  roleSelectorContainer: {
+  subtitle: {
+    fontSize: 15,
+    color: '#64748b',
+    textAlign: 'center',
+    lineHeight: 22,
+    paddingHorizontal: 20,
+  },
+
+  roleSection: {
     marginBottom: 24,
   },
 
-  sectionLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.text,
+  roleLabel: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#475569',
     marginBottom: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
 
-  roleSelector: {
+  roleContainer: {
     flexDirection: 'row',
     gap: 12,
   },
 
-  roleButton: {
+  roleCard: {
     flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 20,
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 18,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#e5e7eb',
+    borderColor: '#e2e8f0',
     position: 'relative',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 3,
   },
 
-  roleButtonActive: {
-    borderColor: Colors.primary,
-    backgroundColor: '#eff6ff',
+  roleCardActive: {
+    borderColor: '#6366f1',
+    backgroundColor: '#f0f9ff',
+    borderWidth: 3,
   },
 
-  roleIcon: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: '#f3f4f6',
+  roleContent: {
+    alignItems: 'center',
+  },
+
+  roleIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#f1f5f9',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
   },
 
   roleIconActive: {
-    backgroundColor: Colors.primary,
+    backgroundColor: '#6366f1',
   },
 
-  roleText: {
+  roleTitle: {
     fontSize: 16,
+    fontWeight: '700',
+    color: '#64748b',
+    marginBottom: 4,
+  },
+
+  roleTitleActive: {
+    color: '#6366f1',
+  },
+
+  roleSubtitle: {
+    fontSize: 12,
+    color: '#6366f1',
     fontWeight: '600',
-    color: Colors.gray,
   },
 
-  roleTextActive: {
-    color: Colors.primary,
-  },
-
-  checkMark: {
+  activeIndicator: {
     position: 'absolute',
-    top: 12,
-    right: 12,
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: Colors.primary,
+    top: 10,
+    right: 10,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#10b981',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#10b981',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+  },
+
+  checkIcon: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  formContainer: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e0e7ff',
+  },
+
+  formHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 20,
+  },
+
+  formIconBox: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#f0fdf4',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
-  checkMarkText: {
-    color: 'white',
+  formTitle: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#1e293b',
+  },
+
+  inputGroup: {
+    marginBottom: 18,
+  },
+
+  inputLabel: {
     fontSize: 14,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#475569',
+    marginBottom: 8,
   },
 
-  formCard: {
-    backgroundColor: 'white',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-
-  inputContainer: {
+  inputWrapper: {
     position: 'relative',
-    marginBottom: 16,
   },
 
-  inputIcon: {
+  inputIconContainer: {
     position: 'absolute',
-    left: 16,
-    top: 16,
+    left: 14,
+    top: 14,
     zIndex: 1,
   },
 
-  input: {
-    paddingLeft: 48,
+  styledInput: {
+    paddingLeft: 46,
+    backgroundColor: '#f8fafc',
+    borderColor: '#cbd5e1',
+    borderWidth: 2,
+    borderRadius: 12,
   },
 
-  infoBox: {
-    backgroundColor: '#eff6ff',
+  patientInfo: {
+    flexDirection: 'row',
+    backgroundColor: '#fffbeb',
     padding: 14,
-    borderRadius: 10,
+    borderRadius: 12,
     marginBottom: 20,
+    gap: 10,
     borderLeftWidth: 3,
-    borderLeftColor: Colors.primary,
+    borderLeftColor: '#fbbf24',
+  },
+
+  infoIcon: {
+    fontSize: 20,
   },
 
   infoText: {
+    flex: 1,
     fontSize: 13,
-    color: '#1e40af',
-    lineHeight: 20,
+    color: '#92400e',
+    lineHeight: 18,
+    fontWeight: '500',
   },
 
   loginButton: {
-    marginTop: 8,
+    height: 54,
+    borderRadius: 14,
+    backgroundColor: '#6366f1',
   },
 
-  loader: {
+  loadingSpinner: {
     marginTop: 16,
   },
 
-  helpContainer: {
+  supportSection: {
+    marginTop: 10,
+  },
+
+  supportCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 20,
     alignItems: 'center',
-    marginTop: 20,
-    gap: 8,
+    borderWidth: 1,
+    borderColor: '#e2e8f0',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
 
-  helpText: {
+  supportQuestion: {
     fontSize: 14,
-    color: Colors.gray,
+    color: '#64748b',
+    marginBottom: 12,
+    fontWeight: '500',
   },
 
-  helpLink: {
+  supportButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#f0f9ff',
+    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: '#6366f1',
+  },
+
+  supportButtonText: {
     fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primary,
-    textDecorationLine: 'underline',
+    fontWeight: '700',
+    color: '#6366f1',
   },
 });

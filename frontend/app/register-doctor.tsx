@@ -70,169 +70,169 @@ export default function RegisterDoctorScreen() {
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
       >
-        {/* HEADER */}
+        {/* HEADER ACCUEILLANT */}
         <View style={styles.header}>
-          <View style={styles.iconContainer}>
-            <Briefcase size={32} color={Colors.primary} strokeWidth={2} />
+          <View style={styles.iconCircle}>
+            <Briefcase size={40} color="#ffffff" strokeWidth={2} />
           </View>
-          <Text style={styles.title}>Inscription Docteur</Text>
+          <Text style={styles.title}>Bienvenue Docteur ! 👨‍⚕️</Text>
           <Text style={styles.subtitle}>
-            Créez votre compte professionnel pour accéder à la plateforme
+            Créez votre espace professionnel en quelques étapes
           </Text>
         </View>
 
-        {/* FORMULAIRE */}
-        <View style={styles.formCard}>
-          <Text style={styles.sectionLabel}>Informations personnelles</Text>
-          
-          {/* Nom complet */}
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputIconContainer}>
-              <User size={20} color={Colors.gray} />
+        {/* SECTION INFORMATIONS PERSONNELLES */}
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconBox}>
+              <User size={20} color="#6366f1" />
             </View>
-            <Input
-              label=""
-              placeholder="Dr. Jean Dupont"
-              value={name}
-              onChangeText={setName}
-              style={styles.input}
-            />
+            <Text style={styles.sectionTitle}>Vos informations</Text>
           </View>
 
-          {/* Spécialité */}
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputIconContainer}>
-              <Briefcase size={20} color={Colors.gray} />
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Nom complet</Text>
+            <View style={styles.inputWrapper}>
+              <Input
+                label=""
+                placeholder="Dr. Jean Dupont"
+                value={name}
+                onChangeText={setName}
+                style={styles.styledInput}
+              />
             </View>
-            <Input
-              label=""
-              placeholder="Médecine générale, Cardiologie..."
-              value={specialty}
-              onChangeText={setSpecialty}
-              style={styles.input}
-            />
           </View>
 
-          <View style={styles.divider} />
-
-          <Text style={styles.sectionLabel}>Identifiants de connexion</Text>
-
-          {/* Nom d'utilisateur */}
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputIconContainer}>
-              <Mail size={20} color={Colors.gray} />
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Spécialité médicale</Text>
+            <View style={styles.inputWrapper}>
+              <Input
+                label=""
+                placeholder="Cardiologie, Médecine générale..."
+                value={specialty}
+                onChangeText={setSpecialty}
+                style={styles.styledInput}
+              />
             </View>
-            <Input
-              label=""
-              placeholder="dr.dupont"
-              value={username}
-              onChangeText={setUsername}
-              autoCapitalize="none"
-              style={styles.input}
-            />
           </View>
-
-          {/* Mot de passe */}
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputIconContainer}>
-              <Lock size={20} color={Colors.gray} />
-            </View>
-            <Input
-              label=""
-              placeholder="Mot de passe (min. 8 caractères)"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-              style={styles.input}
-            />
-          </View>
-
-          {/* Indicateur de force du mot de passe */}
-          {showPasswordStrength && (
-            <View style={styles.validationBox}>
-              {isPasswordStrong(password) ? (
-                <View style={styles.validationSuccess}>
-                  <CheckCircle size={16} color="#10b981" />
-                  <Text style={styles.validationSuccessText}>
-                    Mot de passe suffisamment fort
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.validationError}>
-                  <AlertCircle size={16} color="#ef4444" />
-                  <Text style={styles.validationErrorText}>
-                    Le mot de passe doit contenir au moins 8 caractères
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-
-          {/* Confirmation du mot de passe */}
-          <View style={styles.inputWrapper}>
-            <View style={styles.inputIconContainer}>
-              <Lock size={20} color={Colors.gray} />
-            </View>
-            <Input
-              label=""
-              placeholder="Confirmez votre mot de passe"
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-              style={styles.input}
-            />
-          </View>
-
-          {/* Indicateur de correspondance des mots de passe */}
-          {showPasswordMatch && (
-            <View style={styles.validationBox}>
-              {passwordsMatch ? (
-                <View style={styles.validationSuccess}>
-                  <CheckCircle size={16} color="#10b981" />
-                  <Text style={styles.validationSuccessText}>
-                    Les mots de passe correspondent
-                  </Text>
-                </View>
-              ) : (
-                <View style={styles.validationError}>
-                  <AlertCircle size={16} color="#ef4444" />
-                  <Text style={styles.validationErrorText}>
-                    Les mots de passe ne correspondent pas
-                  </Text>
-                </View>
-              )}
-            </View>
-          )}
-
-          {/* Informations importantes */}
-          <View style={styles.infoBox}>
-            <Text style={styles.infoText}>
-              🔒 Vos données sont sécurisées et conformes aux normes médicales
-            </Text>
-          </View>
-
-          {/* Bouton d'inscription */}
-          <Button 
-            title={loading ? 'Création du compte...' : 'Créer mon compte'} 
-            onPress={handleRegister} 
-            disabled={loading || !passwordsMatch || !isPasswordStrong(password)}
-            style={styles.registerButton}
-          />
-
-          {loading && (
-            <ActivityIndicator 
-              size="small" 
-              color={Colors.primary} 
-              style={styles.loader} 
-            />
-          )}
         </View>
 
-        {/* Lien vers connexion */}
-        <View style={styles.loginLink}>
-          <Text style={styles.loginLinkText}>Vous avez déjà un compte ?</Text>
-          <Text style={styles.loginLinkButton} onPress={() => router.back()}>
-            Se connecter
+        {/* SECTION IDENTIFIANTS */}
+        <View style={styles.sectionCard}>
+          <View style={styles.sectionHeader}>
+            <View style={styles.sectionIconBox}>
+              <Mail size={20} color="#10b981" />
+            </View>
+            <Text style={styles.sectionTitle}>Identifiants de connexion</Text>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Nom d'utilisateur</Text>
+            <View style={styles.inputWrapper}>
+              <Input
+                label=""
+                placeholder="dr.dupont"
+                value={username}
+                onChangeText={setUsername}
+                autoCapitalize="none"
+                style={styles.styledInput}
+              />
+            </View>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Mot de passe</Text>
+            <View style={styles.inputWrapper}>
+              <Input
+                label=""
+                placeholder="Minimum 8 caractères"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+                style={styles.styledInput}
+              />
+            </View>
+            
+            {showPasswordStrength && (
+              <View style={[styles.statusBadge, isPasswordStrong(password) ? styles.successBadge : styles.warningBadge]}>
+                {isPasswordStrong(password) ? (
+                  <>
+                    <CheckCircle size={16} color="#10b981" />
+                    <Text style={styles.successText}>Mot de passe fort ✓</Text>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle size={16} color="#f59e0b" />
+                    <Text style={styles.warningText}>8 caractères minimum</Text>
+                  </>
+                )}
+              </View>
+            )}
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Confirmer le mot de passe</Text>
+            <View style={styles.inputWrapper}>
+              <Input
+                label=""
+                placeholder="Retapez votre mot de passe"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry
+                style={styles.styledInput}
+              />
+            </View>
+
+            {showPasswordMatch && (
+              <View style={[styles.statusBadge, passwordsMatch ? styles.successBadge : styles.errorBadge]}>
+                {passwordsMatch ? (
+                  <>
+                    <CheckCircle size={16} color="#10b981" />
+                    <Text style={styles.successText}>Parfait ! Les mots de passe correspondent</Text>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle size={16} color="#ef4444" />
+                    <Text style={styles.errorText}>Les mots de passe sont différents</Text>
+                  </>
+                )}
+              </View>
+            )}
+          </View>
+        </View>
+
+        {/* NOTICE DE CONFIDENTIALITÉ */}
+        <View style={styles.privacyBox}>
+          <Text style={styles.privacyIcon}>🔐</Text>
+          <View style={styles.privacyContent}>
+            <Text style={styles.privacyTitle}>Vos données sont protégées</Text>
+            <Text style={styles.privacyText}>
+              Cryptage de bout en bout • Conformité RGPD • Normes médicales
+            </Text>
+          </View>
+        </View>
+
+        {/* BOUTON D'INSCRIPTION */}
+        <Button 
+          title={loading ? '⏳ Création du compte...' : '🚀 Créer mon compte'} 
+          onPress={handleRegister} 
+          disabled={loading || !passwordsMatch || !isPasswordStrong(password)}
+          style={styles.registerButton}
+        />
+
+        {loading && (
+          <ActivityIndicator 
+            size="large" 
+            color="#6366f1" 
+            style={styles.loader} 
+          />
+        )}
+
+        {/* FOOTER */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Vous avez déjà un compte ?</Text>
+          <Text style={styles.footerLink} onPress={() => router.back()}>
+            Connectez-vous ici
           </Text>
         </View>
       </ScrollView>
@@ -243,7 +243,7 @@ export default function RegisterDoctorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#f0f9ff',
   },
   
   content: {
@@ -251,160 +251,215 @@ const styles = StyleSheet.create({
   },
   
   contentContainer: {
-    padding: 24,
+    padding: 20,
     paddingBottom: 40,
   },
 
   header: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 30,
     marginTop: 10,
   },
 
-  iconContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    backgroundColor: '#eff6ff',
+  iconCircle: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 20,
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    elevation: 10,
   },
 
   title: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: Colors.text,
+    fontSize: 28,
+    fontWeight: '800',
+    color: '#1e293b',
     marginBottom: 8,
+    textAlign: 'center',
   },
 
   subtitle: {
-    fontSize: 15,
-    color: Colors.gray,
+    fontSize: 16,
+    color: '#64748b',
     textAlign: 'center',
-    lineHeight: 22,
-    paddingHorizontal: 20,
+    lineHeight: 24,
+    paddingHorizontal: 30,
   },
 
-  formCard: {
-    backgroundColor: 'white',
-    borderRadius: 16,
+  sectionCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 20,
     padding: 20,
     marginBottom: 20,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e0e7ff',
   },
 
-  sectionLabel: {
-    fontSize: 13,
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20,
+    gap: 12,
+  },
+
+  sectionIconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#f0f9ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: '700',
-    color: Colors.text,
-    marginBottom: 16,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    color: '#1e293b',
+  },
+
+  inputGroup: {
+    marginBottom: 20,
+  },
+
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#475569',
+    marginBottom: 8,
   },
 
   inputWrapper: {
     position: 'relative',
-    marginBottom: 16,
   },
 
-  inputIconContainer: {
-    position: 'absolute',
-    left: 16,
-    top: 16,
-    zIndex: 1,
+  styledInput: {
+    backgroundColor: '#f8fafc',
+    borderColor: '#cbd5e1',
+    borderWidth: 2,
+    borderRadius: 12,
   },
 
-  input: {
-    paddingLeft: 48,
-  },
-
-  divider: {
-    height: 1,
-    backgroundColor: '#e5e7eb',
-    marginVertical: 20,
-  },
-
-  validationBox: {
-    marginBottom: 16,
-  },
-
-  validationSuccess: {
+  statusBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    padding: 10,
-    backgroundColor: '#f0fdf4',
-    borderRadius: 8,
+    marginTop: 8,
+    padding: 12,
+    borderRadius: 12,
   },
 
-  validationSuccessText: {
+  successBadge: {
+    backgroundColor: '#f0fdf4',
+    borderWidth: 1,
+    borderColor: '#86efac',
+  },
+
+  warningBadge: {
+    backgroundColor: '#fffbeb',
+    borderWidth: 1,
+    borderColor: '#fde047',
+  },
+
+  errorBadge: {
+    backgroundColor: '#fef2f2',
+    borderWidth: 1,
+    borderColor: '#fca5a5',
+  },
+
+  successText: {
     fontSize: 13,
     color: '#10b981',
     fontWeight: '600',
-  },
-
-  validationError: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    padding: 10,
-    backgroundColor: '#fef2f2',
-    borderRadius: 8,
-  },
-
-  validationErrorText: {
     flex: 1,
+  },
+
+  warningText: {
+    fontSize: 13,
+    color: '#f59e0b',
+    fontWeight: '600',
+    flex: 1,
+  },
+
+  errorText: {
     fontSize: 13,
     color: '#ef4444',
-    fontWeight: '500',
+    fontWeight: '600',
+    flex: 1,
   },
 
-  infoBox: {
-    backgroundColor: '#eff6ff',
-    padding: 14,
-    borderRadius: 10,
-    marginBottom: 20,
-    marginTop: 8,
-    borderLeftWidth: 3,
-    borderLeftColor: Colors.primary,
+  privacyBox: {
+    flexDirection: 'row',
+    backgroundColor: '#fefce8',
+    padding: 16,
+    borderRadius: 16,
+    marginBottom: 24,
+    alignItems: 'flex-start',
+    gap: 12,
+    borderWidth: 2,
+    borderColor: '#fde047',
   },
 
-  infoText: {
-    fontSize: 13,
-    color: '#1e40af',
-    lineHeight: 20,
+  privacyIcon: {
+    fontSize: 24,
+  },
+
+  privacyContent: {
+    flex: 1,
+  },
+
+  privacyTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#854d0e',
+    marginBottom: 4,
+  },
+
+  privacyText: {
+    fontSize: 12,
+    color: '#a16207',
+    lineHeight: 18,
   },
 
   registerButton: {
-    marginTop: 8,
+    marginBottom: 16,
+    height: 56,
+    borderRadius: 16,
+    backgroundColor: '#6366f1',
   },
 
   loader: {
-    marginTop: 16,
+    marginVertical: 20,
   },
 
-  loginLink: {
+  footer: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     gap: 6,
     marginTop: 20,
+    paddingVertical: 16,
   },
 
-  loginLinkText: {
-    fontSize: 14,
-    color: Colors.gray,
+  footerText: {
+    fontSize: 15,
+    color: '#64748b',
   },
 
-  loginLinkButton: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.primary,
+  footerLink: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: '#6366f1',
     textDecorationLine: 'underline',
   },
 });
