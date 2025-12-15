@@ -7,11 +7,10 @@ const getBaseUrl = () => {
   // Si tu as défini une variable d'environnement (recommandé)
   // if (process.env.EXPO_PUBLIC_API_URL) {
   //   return process.env.EXPO_PUBLIC_API_URL;
-  // }
-  console.log('fjfjkdjfkjsdkjfksdj')
+  
 
   // Téléphone physique Android OU iOS → il faut l'IP de ta machine
-  return 'http://192.168.0.110:3000/api'; // ← Remplace par TON IP locale
+  return 'https://e-carnet-td68.onrender.com/api'; // ← Remplace par TON IP locale
 };
 
 const API_BASE_URL = getBaseUrl();
