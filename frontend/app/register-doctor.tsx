@@ -6,7 +6,7 @@ import Button from '@/components/Button';
 import Input from '@/components/Input';
 import Header from '@/components/Header';
 import { registerDoctor } from '@/services/api';
-import { User, Briefcase, Mail, Lock, CheckCircle, AlertCircle } from 'lucide-react-native';
+import { User, Briefcase, Mail, Lock, CheckCircle, AlertCircle, Shield } from 'lucide-react-native';
 
 export default function RegisterDoctorScreen() {
   const router = useRouter();
@@ -70,14 +70,17 @@ export default function RegisterDoctorScreen() {
         contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
       >
-        {/* HEADER ACCUEILLANT */}
+        {/* HEADER MODERNE */}
         <View style={styles.header}>
-          <View style={styles.iconCircle}>
-            <Briefcase size={40} color="#ffffff" strokeWidth={2} />
+          <View style={styles.iconContainer}>
+            <View style={styles.iconCircle}>
+              <Briefcase size={36} color="#ffffff" strokeWidth={2.5} />
+            </View>
+            <View style={styles.iconGlow} />
           </View>
-          <Text style={styles.title}>Bienvenue Docteur ! 👨‍⚕️</Text>
+          <Text style={styles.title}>Rejoignez-nous</Text>
           <Text style={styles.subtitle}>
-            Créez votre espace professionnel en quelques étapes
+            Créez votre espace professionnel en quelques minutes
           </Text>
         </View>
 
@@ -85,9 +88,9 @@ export default function RegisterDoctorScreen() {
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconBox}>
-              <User size={20} color="#6366f1" />
+              <User size={18} color="#6366f1" strokeWidth={2.5} />
             </View>
-            <Text style={styles.sectionTitle}>Vos informations</Text>
+            <Text style={styles.sectionTitle}>Informations personnelles</Text>
           </View>
 
           <View style={styles.inputGroup}>
@@ -108,7 +111,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="Cardiologie, Médecine générale..."
+                placeholder="Ex: Cardiologie, Pédiatrie..."
                 value={specialty}
                 onChangeText={setSpecialty}
                 style={styles.styledInput}
@@ -120,10 +123,10 @@ export default function RegisterDoctorScreen() {
         {/* SECTION IDENTIFIANTS */}
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
-            <View style={styles.sectionIconBox}>
-              <Mail size={20} color="#10b981" />
+            <View style={[styles.sectionIconBox, styles.sectionIconBoxGreen]}>
+              <Lock size={18} color="#10b981" strokeWidth={2.5} />
             </View>
-            <Text style={styles.sectionTitle}>Identifiants de connexion</Text>
+            <Text style={styles.sectionTitle}>Sécurité du compte</Text>
           </View>
 
           <View style={styles.inputGroup}>
@@ -157,13 +160,13 @@ export default function RegisterDoctorScreen() {
               <View style={[styles.statusBadge, isPasswordStrong(password) ? styles.successBadge : styles.warningBadge]}>
                 {isPasswordStrong(password) ? (
                   <>
-                    <CheckCircle size={16} color="#10b981" />
-                    <Text style={styles.successText}>Mot de passe fort ✓</Text>
+                    <CheckCircle size={16} color="#10b981" strokeWidth={2.5} />
+                    <Text style={styles.successText}>Mot de passe sécurisé</Text>
                   </>
                 ) : (
                   <>
-                    <AlertCircle size={16} color="#f59e0b" />
-                    <Text style={styles.warningText}>8 caractères minimum</Text>
+                    <AlertCircle size={16} color="#f59e0b" strokeWidth={2.5} />
+                    <Text style={styles.warningText}>Minimum 8 caractères requis</Text>
                   </>
                 )}
               </View>
@@ -187,13 +190,13 @@ export default function RegisterDoctorScreen() {
               <View style={[styles.statusBadge, passwordsMatch ? styles.successBadge : styles.errorBadge]}>
                 {passwordsMatch ? (
                   <>
-                    <CheckCircle size={16} color="#10b981" />
-                    <Text style={styles.successText}>Parfait ! Les mots de passe correspondent</Text>
+                    <CheckCircle size={16} color="#10b981" strokeWidth={2.5} />
+                    <Text style={styles.successText}>Les mots de passe correspondent</Text>
                   </>
                 ) : (
                   <>
-                    <AlertCircle size={16} color="#ef4444" />
-                    <Text style={styles.errorText}>Les mots de passe sont différents</Text>
+                    <AlertCircle size={16} color="#ef4444" strokeWidth={2.5} />
+                    <Text style={styles.errorText}>Les mots de passe ne correspondent pas</Text>
                   </>
                 )}
               </View>
@@ -203,21 +206,26 @@ export default function RegisterDoctorScreen() {
 
         {/* NOTICE DE CONFIDENTIALITÉ */}
         <View style={styles.privacyBox}>
-          <Text style={styles.privacyIcon}>🔐</Text>
+          <View style={styles.privacyIconBox}>
+            <Shield size={20} color="#059669" strokeWidth={2.5} />
+          </View>
           <View style={styles.privacyContent}>
             <Text style={styles.privacyTitle}>Vos données sont protégées</Text>
             <Text style={styles.privacyText}>
-              Cryptage de bout en bout • Conformité RGPD • Normes médicales
+              Cryptage end-to-end • Conformité RGPD • Hébergement sécurisé
             </Text>
           </View>
         </View>
 
         {/* BOUTON D'INSCRIPTION */}
         <Button 
-          title={loading ? '⏳ Création du compte...' : '🚀 Créer mon compte'} 
+          title={loading ? 'Création en cours...' : 'Créer mon compte'} 
           onPress={handleRegister} 
           disabled={loading || !passwordsMatch || !isPasswordStrong(password)}
-          style={styles.registerButton}
+          style={[
+            styles.registerButton,
+            (loading || !passwordsMatch || !isPasswordStrong(password)) && styles.registerButtonDisabled
+          ]}
         />
 
         {loading && (
@@ -232,7 +240,7 @@ export default function RegisterDoctorScreen() {
         <View style={styles.footer}>
           <Text style={styles.footerText}>Vous avez déjà un compte ?</Text>
           <Text style={styles.footerLink} onPress={() => router.back()}>
-            Connectez-vous ici
+            Se connecter
           </Text>
         </View>
       </ScrollView>
@@ -243,7 +251,7 @@ export default function RegisterDoctorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fafafa',
   },
   
   content: {
@@ -251,59 +259,75 @@ const styles = StyleSheet.create({
   },
   
   contentContainer: {
-    padding: 20,
+    padding: 24,
     paddingBottom: 40,
   },
 
   header: {
     alignItems: 'center',
-    marginBottom: 30,
-    marginTop: 10,
+    marginBottom: 32,
+    marginTop: 20,
+  },
+
+  iconContainer: {
+    position: 'relative',
+    marginBottom: 24,
   },
 
   iconCircle: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 80,
+    height: 80,
+    borderRadius: 24,
     backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
     shadowColor: '#6366f1',
     shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 10,
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 12,
+  },
+
+  iconGlow: {
+    position: 'absolute',
+    width: 80,
+    height: 80,
+    borderRadius: 24,
+    backgroundColor: '#6366f1',
+    opacity: 0.2,
+    top: 0,
+    left: 0,
   },
 
   title: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#1e293b',
+    fontSize: 32,
+    fontWeight: '700',
+    color: '#0f172a',
     marginBottom: 8,
     textAlign: 'center',
+    letterSpacing: -0.5,
   },
 
   subtitle: {
-    fontSize: 16,
+    fontSize: 15,
     color: '#64748b',
     textAlign: 'center',
-    lineHeight: 24,
-    paddingHorizontal: 30,
+    lineHeight: 22,
+    paddingHorizontal: 20,
   },
 
   sectionCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 20,
+    borderRadius: 16,
     padding: 20,
-    marginBottom: 20,
+    marginBottom: 16,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
     borderWidth: 1,
-    borderColor: '#e0e7ff',
+    borderColor: '#f1f5f9',
   },
 
   sectionHeader: {
@@ -314,28 +338,33 @@ const styles = StyleSheet.create({
   },
 
   sectionIconBox: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: '#f0f9ff',
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#eef2ff',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
+  sectionIconBoxGreen: {
+    backgroundColor: '#d1fae5',
+  },
+
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1e293b',
+    fontSize: 17,
+    fontWeight: '600',
+    color: '#0f172a',
+    letterSpacing: -0.2,
   },
 
   inputGroup: {
-    marginBottom: 20,
+    marginBottom: 16,
   },
 
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#475569',
+    color: '#334155',
     marginBottom: 8,
   },
 
@@ -345,8 +374,8 @@ const styles = StyleSheet.create({
 
   styledInput: {
     backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
-    borderWidth: 2,
+    borderColor: '#e2e8f0',
+    borderWidth: 1.5,
     borderRadius: 12,
   },
 
@@ -354,13 +383,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    marginTop: 8,
-    padding: 12,
-    borderRadius: 12,
+    marginTop: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    borderRadius: 10,
   },
 
   successBadge: {
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#ecfdf5',
     borderWidth: 1,
     borderColor: '#86efac',
   },
@@ -379,67 +409,83 @@ const styles = StyleSheet.create({
 
   successText: {
     fontSize: 13,
-    color: '#10b981',
+    color: '#059669',
     fontWeight: '600',
     flex: 1,
   },
 
   warningText: {
     fontSize: 13,
-    color: '#f59e0b',
+    color: '#d97706',
     fontWeight: '600',
     flex: 1,
   },
 
   errorText: {
     fontSize: 13,
-    color: '#ef4444',
+    color: '#dc2626',
     fontWeight: '600',
     flex: 1,
   },
 
   privacyBox: {
     flexDirection: 'row',
-    backgroundColor: '#fefce8',
+    backgroundColor: '#f0fdf4',
     padding: 16,
-    borderRadius: 16,
+    borderRadius: 14,
     marginBottom: 24,
     alignItems: 'flex-start',
     gap: 12,
-    borderWidth: 2,
-    borderColor: '#fde047',
+    borderWidth: 1,
+    borderColor: '#bbf7d0',
   },
 
-  privacyIcon: {
-    fontSize: 24,
+  privacyIconBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: '#d1fae5',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 
   privacyContent: {
     flex: 1,
+    paddingTop: 2,
   },
 
   privacyTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#854d0e',
+    color: '#065f46',
     marginBottom: 4,
   },
 
   privacyText: {
     fontSize: 12,
-    color: '#a16207',
+    color: '#047857',
     lineHeight: 18,
   },
 
   registerButton: {
     marginBottom: 16,
-    height: 56,
-    borderRadius: 16,
+    height: 54,
+    borderRadius: 14,
     backgroundColor: '#6366f1',
+    shadowColor: '#6366f1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+
+  registerButtonDisabled: {
+    opacity: 0.5,
+    shadowOpacity: 0.1,
   },
 
   loader: {
-    marginVertical: 20,
+    marginVertical: 16,
   },
 
   footer: {
@@ -447,8 +493,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     gap: 6,
-    marginTop: 20,
-    paddingVertical: 16,
+    marginTop: 16,
+    paddingVertical: 20,
   },
 
   footerText: {
@@ -460,6 +506,5 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '700',
     color: '#6366f1',
-    textDecorationLine: 'underline',
   },
 });

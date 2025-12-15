@@ -112,17 +112,7 @@ export default function OnboardingScreen() {
 
       {/* FOOTER */}
       <View style={styles.footer}>
-        <View style={styles.footerBadges}>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🔒 Crypté E2E</Text>
-          </View>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>✓ RGPD</Text>
-          </View>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🇫🇷 France</Text>
-          </View>
-        </View>
+
         <Text style={styles.footerText}>© 2024 Topitoh - Tous droits réservés</Text>
       </View>
     </ScrollView>
