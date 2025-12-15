@@ -75,7 +75,7 @@ export default function RegisterDoctorScreen() {
           <View style={styles.iconCircle}>
             <Briefcase size={40} color="#ffffff" strokeWidth={2} />
           </View>
-          <Text style={styles.title}>Bienvenue Docteur ! 👨‍⚕️</Text>
+          <Text style={styles.title}>Bienvenue Docteur ! 🩺</Text>
           <Text style={styles.subtitle}>
             Créez votre espace professionnel en quelques étapes
           </Text>
@@ -85,7 +85,7 @@ export default function RegisterDoctorScreen() {
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconBox}>
-              <User size={20} color="#6366f1" />
+              <User size={20} color="#f43f5e" />
             </View>
             <Text style={styles.sectionTitle}>Vos informations</Text>
           </View>
@@ -95,7 +95,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="Dr. Jean Dupont"
+                placeholder=""
                 value={name}
                 onChangeText={setName}
                 style={styles.styledInput}
@@ -108,7 +108,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="Cardiologie, Médecine générale..."
+                placeholder=""
                 value={specialty}
                 onChangeText={setSpecialty}
                 style={styles.styledInput}
@@ -121,7 +121,7 @@ export default function RegisterDoctorScreen() {
         <View style={styles.sectionCard}>
           <View style={styles.sectionHeader}>
             <View style={styles.sectionIconBox}>
-              <Mail size={20} color="#10b981" />
+              <Mail size={20} color="#ec4899" />
             </View>
             <Text style={styles.sectionTitle}>Identifiants de connexion</Text>
           </View>
@@ -131,7 +131,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="dr.dupont"
+                placeholder=""
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize="none"
@@ -157,12 +157,12 @@ export default function RegisterDoctorScreen() {
               <View style={[styles.statusBadge, isPasswordStrong(password) ? styles.successBadge : styles.warningBadge]}>
                 {isPasswordStrong(password) ? (
                   <>
-                    <CheckCircle size={16} color="#10b981" />
+                    <CheckCircle size={16} color="#ec4899" />
                     <Text style={styles.successText}>Mot de passe fort ✓</Text>
                   </>
                 ) : (
                   <>
-                    <AlertCircle size={16} color="#f59e0b" />
+                    <AlertCircle size={16} color="#fb7185" />
                     <Text style={styles.warningText}>8 caractères minimum</Text>
                   </>
                 )}
@@ -175,7 +175,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="Retapez votre mot de passe"
+                placeholder="Minimum 8 caractères"
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 secureTextEntry
@@ -187,12 +187,12 @@ export default function RegisterDoctorScreen() {
               <View style={[styles.statusBadge, passwordsMatch ? styles.successBadge : styles.errorBadge]}>
                 {passwordsMatch ? (
                   <>
-                    <CheckCircle size={16} color="#10b981" />
+                    <CheckCircle size={16} color="#ec4899" />
                     <Text style={styles.successText}>Parfait ! Les mots de passe correspondent</Text>
                   </>
                 ) : (
                   <>
-                    <AlertCircle size={16} color="#ef4444" />
+                    <AlertCircle size={16} color="#f43f5e" />
                     <Text style={styles.errorText}>Les mots de passe sont différents</Text>
                   </>
                 )}
@@ -203,7 +203,7 @@ export default function RegisterDoctorScreen() {
 
         {/* NOTICE DE CONFIDENTIALITÉ */}
         <View style={styles.privacyBox}>
-          <Text style={styles.privacyIcon}>🔐</Text>
+          <Text style={styles.privacyIcon}>💗</Text>
           <View style={styles.privacyContent}>
             <Text style={styles.privacyTitle}>Vos données sont protégées</Text>
             <Text style={styles.privacyText}>
@@ -214,7 +214,7 @@ export default function RegisterDoctorScreen() {
 
         {/* BOUTON D'INSCRIPTION */}
         <Button 
-          title={loading ? '⏳ Création du compte...' : '🚀 Créer mon compte'} 
+          title={loading ? '⏳ Création du compte...' : '🌸 Créer mon compte'} 
           onPress={handleRegister} 
           disabled={loading || !passwordsMatch || !isPasswordStrong(password)}
           style={styles.registerButton}
@@ -223,7 +223,7 @@ export default function RegisterDoctorScreen() {
         {loading && (
           <ActivityIndicator 
             size="large" 
-            color="#6366f1" 
+            color="#f43f5e" 
             style={styles.loader} 
           />
         )}
@@ -243,7 +243,7 @@ export default function RegisterDoctorScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fff5f7',
   },
   
   content: {
@@ -265,11 +265,11 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
     borderRadius: 45,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 20,
-    shadowColor: '#6366f1',
+    shadowColor: '#f43f5e',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#e0e7ff',
+    borderColor: '#fecdd3',
   },
 
   sectionHeader: {
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 12,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fff1f2',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -344,8 +344,8 @@ const styles = StyleSheet.create({
   },
 
   styledInput: {
-    backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
+    backgroundColor: '#fff5f7',
+    borderColor: '#fecdd3',
     borderWidth: 2,
     borderRadius: 12,
   },
@@ -360,54 +360,54 @@ const styles = StyleSheet.create({
   },
 
   successBadge: {
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#fce4ec',
     borderWidth: 1,
-    borderColor: '#86efac',
+    borderColor: '#f9a8d4',
   },
 
   warningBadge: {
-    backgroundColor: '#fffbeb',
+    backgroundColor: '#ffe4e6',
     borderWidth: 1,
-    borderColor: '#fde047',
+    borderColor: '#fda4af',
   },
 
   errorBadge: {
-    backgroundColor: '#fef2f2',
+    backgroundColor: '#fff1f2',
     borderWidth: 1,
-    borderColor: '#fca5a5',
+    borderColor: '#fda4af',
   },
 
   successText: {
     fontSize: 13,
-    color: '#10b981',
+    color: '#ec4899',
     fontWeight: '600',
     flex: 1,
   },
 
   warningText: {
     fontSize: 13,
-    color: '#f59e0b',
+    color: '#fb7185',
     fontWeight: '600',
     flex: 1,
   },
 
   errorText: {
     fontSize: 13,
-    color: '#ef4444',
+    color: '#f43f5e',
     fontWeight: '600',
     flex: 1,
   },
 
   privacyBox: {
     flexDirection: 'row',
-    backgroundColor: '#fefce8',
+    backgroundColor: '#ffe4e6',
     padding: 16,
     borderRadius: 16,
     marginBottom: 24,
     alignItems: 'flex-start',
     gap: 12,
     borderWidth: 2,
-    borderColor: '#fde047',
+    borderColor: '#fecdd3',
   },
 
   privacyIcon: {
@@ -421,13 +421,13 @@ const styles = StyleSheet.create({
   privacyTitle: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#854d0e',
+    color: '#881337',
     marginBottom: 4,
   },
 
   privacyText: {
     fontSize: 12,
-    color: '#a16207',
+    color: '#9f1239',
     lineHeight: 18,
   },
 
@@ -435,7 +435,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     height: 56,
     borderRadius: 16,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
   },
 
   loader: {
@@ -459,7 +459,7 @@ const styles = StyleSheet.create({
   footerLink: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#6366f1',
+    color: '#f43f5e',
     textDecorationLine: 'underline',
   },
 });

@@ -2,7 +2,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import Button from '@/components/Button';
-import { Heart, Shield, Clock, Users } from 'lucide-react-native';
+import { Heart, Shield, Clock, Users, Stethoscope } from 'lucide-react-native';
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -17,52 +17,52 @@ export default function OnboardingScreen() {
         <View style={styles.logoContainer}>
           <View style={styles.logoOuter}>
             <View style={styles.logoInner}>
-              <Heart size={44} color="#ffffff" strokeWidth={2.5} fill="#ffffff" />
+              <Stethoscope size={50} color="#ffffff" strokeWidth={2.5} />
             </View>
           </View>
         </View>
 
-        <Text style={styles.appName}>Topitoh</Text>
-        <Text style={styles.tagline}>Votre santé, toujours à portée de main</Text>
+        <Text style={styles.appName}>Topitho</Text>
+        <Text style={styles.tagline}>Votre carnet médical, toujours à portée de main</Text>
         
         <View style={styles.badge}>
-          <Shield size={14} color="#10b981" />
+          <Shield size={14} color="#f43f5e" />
           <Text style={styles.badgeText}>Sécurisé & Confidentiel</Text>
         </View>
       </View>
 
       {/* FEATURES CARDS */}
       <View style={styles.featuresSection}>
-        <Text style={styles.featuresTitle}>Pourquoi choisir Topitoh ?</Text>
+        <Text style={styles.featuresTitle}>Pourquoi choisir Topitho?</Text>
         
         <View style={styles.featuresGrid}>
           <View style={styles.featureCard}>
-            <View style={[styles.featureIcon, { backgroundColor: '#dbeafe' }]}>
-              <Heart size={24} color="#3b82f6" strokeWidth={2} />
+            <View style={[styles.featureIcon, { backgroundColor: '#ffe4e6' }]}>
+              <Heart size={24} color="#f43f5e" strokeWidth={2} />
             </View>
             <Text style={styles.featureTitle}>Dossier centralisé</Text>
             <Text style={styles.featureText}>Tous vos documents médicaux au même endroit</Text>
           </View>
 
           <View style={styles.featureCard}>
-            <View style={[styles.featureIcon, { backgroundColor: '#dcfce7' }]}>
-              <Shield size={24} color="#10b981" strokeWidth={2} />
+            <View style={[styles.featureIcon, { backgroundColor: '#fce7f3' }]}>
+              <Shield size={24} color="#ec4899" strokeWidth={2} />
             </View>
             <Text style={styles.featureTitle}>Sécurité maximale</Text>
             <Text style={styles.featureText}>Cryptage et conformité RGPD garantis</Text>
           </View>
 
           <View style={styles.featureCard}>
-            <View style={[styles.featureIcon, { backgroundColor: '#fef3c7' }]}>
-              <Clock size={24} color="#f59e0b" strokeWidth={2} />
+            <View style={[styles.featureIcon, { backgroundColor: '#fed7e2' }]}>
+              <Clock size={24} color="#fb7185" strokeWidth={2} />
             </View>
             <Text style={styles.featureTitle}>Accès instantané</Text>
             <Text style={styles.featureText}>Consultez votre historique 24h/24</Text>
           </View>
 
           <View style={styles.featureCard}>
-            <View style={[styles.featureIcon, { backgroundColor: '#e0e7ff' }]}>
-              <Users size={24} color="#6366f1" strokeWidth={2} />
+            <View style={[styles.featureIcon, { backgroundColor: '#fce4ec' }]}>
+              <Users size={24} color="#f472b6" strokeWidth={2} />
             </View>
             <Text style={styles.featureTitle}>Collaboration</Text>
             <Text style={styles.featureText}>Partagez avec vos médecins facilement</Text>
@@ -74,14 +74,14 @@ export default function OnboardingScreen() {
       <View style={styles.ctaSection}>
         <View style={styles.ctaCard}>
           <View style={styles.ctaHeader}>
-            <Text style={styles.ctaEmoji}>👤</Text>
+            <Text style={styles.ctaEmoji}>💝</Text>
             <View style={styles.ctaTextContainer}>
               <Text style={styles.ctaTitle}>Vous êtes patient ?</Text>
               <Text style={styles.ctaSubtitle}>Accédez à votre dossier médical</Text>
             </View>
           </View>
           <Button
-            title="🔓 Se connecter"
+            title="🌸 Se connecter"
             onPress={() => router.push('/login')}
             style={styles.primaryButton}
           />
@@ -95,7 +95,7 @@ export default function OnboardingScreen() {
 
         <View style={[styles.ctaCard, styles.doctorCard]}>
           <View style={styles.ctaHeader}>
-            <Text style={styles.ctaEmoji}>👨‍⚕️</Text>
+            <Text style={styles.ctaEmoji}>🩺</Text>
             <View style={styles.ctaTextContainer}>
               <Text style={styles.ctaTitle}>Vous êtes médecin ?</Text>
               <Text style={styles.ctaSubtitle}>Rejoignez notre réseau professionnel</Text>
@@ -114,16 +114,16 @@ export default function OnboardingScreen() {
       <View style={styles.footer}>
         <View style={styles.footerBadges}>
           <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🔒 Crypté E2E</Text>
+            <Text style={styles.footerBadgeText}>💗 Crypté E2E</Text>
           </View>
           <View style={styles.footerBadge}>
             <Text style={styles.footerBadgeText}>✓ RGPD</Text>
           </View>
           <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🇫🇷 France</Text>
+            <Text style={styles.footerBadgeText}>🌺 France</Text>
           </View>
         </View>
-        <Text style={styles.footerText}>© 2024 Topitoh - Tous droits réservés</Text>
+        <Text style={styles.footerText}>© 2024 Topitho- Tous droits réservés</Text>
       </View>
     </ScrollView>
   );
@@ -132,7 +132,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fff5f7',
   },
 
   scrollContent: {
@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: '#dbeafe',
+    backgroundColor: '#ffe4e6',
     opacity: 0.5,
     top: -50,
     right: -50,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: '#bfdbfe',
+    backgroundColor: '#fecdd3',
     opacity: 0.4,
     bottom: 0,
     left: -30,
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#6366f1',
+    shadowColor: '#f43f5e',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 20,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -219,18 +219,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#ffe4e6',
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#86efac',
+    borderColor: '#fda4af',
   },
 
   badgeText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#10b981',
+    color: '#f43f5e',
   },
 
   featuresSection: {
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#fecdd3',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: '#fecdd3',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.08,
@@ -308,8 +308,8 @@ const styles = StyleSheet.create({
   },
 
   doctorCard: {
-    borderColor: '#c7d2fe',
-    backgroundColor: '#fafafa',
+    borderColor: '#fce4ec',
+    backgroundColor: '#fffbfc',
   },
 
   ctaHeader: {
@@ -341,14 +341,14 @@ const styles = StyleSheet.create({
   },
 
   primaryButton: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
     height: 52,
     borderRadius: 14,
   },
 
   secondaryButton: {
     borderWidth: 2,
-    borderColor: '#6366f1',
+    borderColor: '#f43f5e',
     backgroundColor: '#ffffff',
     height: 52,
     borderRadius: 14,
@@ -363,13 +363,13 @@ const styles = StyleSheet.create({
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: '#cbd5e1',
+    backgroundColor: '#fecdd3',
   },
 
   dividerText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#94a3b8',
+    color: '#f9a8d4',
     marginHorizontal: 16,
   },
 
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#fecdd3',
   },
 
   footerBadgeText: {

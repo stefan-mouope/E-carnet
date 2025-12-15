@@ -65,7 +65,7 @@ export default function LoginScreen() {
               <Stethoscope size={44} color="#ffffff" strokeWidth={2.5} />
             </View>
           </View>
-          <Text style={styles.title}>Ravi de vous revoir ! 👋</Text>
+          <Text style={styles.title}>Ravi de vous revoir ! 💝</Text>
           <Text style={styles.subtitle}>
             Connectez-vous pour accéder à vos services médicaux
           </Text>
@@ -131,7 +131,7 @@ export default function LoginScreen() {
         <View style={styles.formContainer}>
           <View style={styles.formHeader}>
             <View style={styles.formIconBox}>
-              <Lock size={18} color="#10b981" />
+              <Lock size={18} color="#f43f5e" />
             </View>
             <Text style={styles.formTitle}>Connexion sécurisée</Text>
           </View>
@@ -140,7 +140,7 @@ export default function LoginScreen() {
             <Text style={styles.inputLabel}>Identifiant</Text>
             <View style={styles.inputWrapper}>
               <View style={styles.inputIconContainer}>
-                <Mail size={20} color="#6366f1" />
+                <Mail size={20} color="#f43f5e" />
               </View>
               <Input
                 label=""
@@ -157,7 +157,7 @@ export default function LoginScreen() {
             <Text style={styles.inputLabel}>Mot de passe</Text>
             <View style={styles.inputWrapper}>
               <View style={styles.inputIconContainer}>
-                <Lock size={20} color="#6366f1" />
+                <Lock size={20} color="#f43f5e" />
               </View>
               <Input
                 label=""
@@ -173,7 +173,7 @@ export default function LoginScreen() {
           {/* INFO PATIENT */}
           {role === 'patient' && (
             <View style={styles.patientInfo}>
-              <Text style={styles.infoIcon}>💡</Text>
+              <Text style={styles.infoIcon}>💗</Text>
               <Text style={styles.infoText}>
                 Un code unique vous sera demandé après connexion pour accéder à votre dossier
               </Text>
@@ -182,7 +182,7 @@ export default function LoginScreen() {
 
           {/* BOUTON */}
           <Button 
-            title={loading ? '⏳ Connexion...' : '🔓 Me connecter'} 
+            title={loading ? '⏳ Connexion...' : '🌸 Me connecter'} 
             onPress={handleLogin} 
             disabled={loading}
             style={styles.loginButton}
@@ -191,7 +191,7 @@ export default function LoginScreen() {
           {loading && (
             <ActivityIndicator 
               size="large" 
-              color="#6366f1" 
+              color="#f43f5e" 
               style={styles.loadingSpinner} 
             />
           )}
@@ -214,7 +214,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fff5f7',
   },
   
   content: {
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
     opacity: 0.2,
     top: -10,
     left: -10,
@@ -252,10 +252,10 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#6366f1',
+    shadowColor: '#f43f5e',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.4,
     shadowRadius: 16,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
     padding: 18,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: '#fecdd3',
     position: 'relative',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -311,8 +311,8 @@ const styles = StyleSheet.create({
   },
 
   roleCardActive: {
-    borderColor: '#6366f1',
-    backgroundColor: '#f0f9ff',
+    borderColor: '#f43f5e',
+    backgroundColor: '#fff1f2',
     borderWidth: 3,
   },
 
@@ -324,14 +324,14 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 32,
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#ffe4e6',
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
   },
 
   roleIconActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
   },
 
   roleTitle: {
@@ -342,12 +342,12 @@ const styles = StyleSheet.create({
   },
 
   roleTitleActive: {
-    color: '#6366f1',
+    color: '#f43f5e',
   },
 
   roleSubtitle: {
     fontSize: 12,
-    color: '#6366f1',
+    color: '#f43f5e',
     fontWeight: '600',
   },
 
@@ -358,10 +358,10 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#10b981',
+    backgroundColor: '#ec4899',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#10b981',
+    shadowColor: '#ec4899',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.4,
     shadowRadius: 4,
@@ -384,7 +384,7 @@ const styles = StyleSheet.create({
     shadowRadius: 12,
     elevation: 4,
     borderWidth: 1,
-    borderColor: '#e0e7ff',
+    borderColor: '#fecdd3',
   },
 
   formHeader: {
@@ -398,7 +398,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: '#f0fdf4',
+    backgroundColor: '#ffe4e6',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -433,21 +433,21 @@ const styles = StyleSheet.create({
 
   styledInput: {
     paddingLeft: 46,
-    backgroundColor: '#f8fafc',
-    borderColor: '#cbd5e1',
+    backgroundColor: '#fff5f7',
+    borderColor: '#fecdd3',
     borderWidth: 2,
     borderRadius: 12,
   },
 
   patientInfo: {
     flexDirection: 'row',
-    backgroundColor: '#fffbeb',
+    backgroundColor: '#fff1f2',
     padding: 14,
     borderRadius: 12,
     marginBottom: 20,
     gap: 10,
     borderLeftWidth: 3,
-    borderLeftColor: '#fbbf24',
+    borderLeftColor: '#fb7185',
   },
 
   infoIcon: {
@@ -457,7 +457,7 @@ const styles = StyleSheet.create({
   infoText: {
     flex: 1,
     fontSize: 13,
-    color: '#92400e',
+    color: '#881337',
     lineHeight: 18,
     fontWeight: '500',
   },
@@ -465,7 +465,7 @@ const styles = StyleSheet.create({
   loginButton: {
     height: 54,
     borderRadius: 14,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#f43f5e',
   },
 
   loadingSpinner: {
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#fecdd3',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -500,15 +500,15 @@ const styles = StyleSheet.create({
   supportButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: '#f0f9ff',
+    backgroundColor: '#fff1f2',
     borderRadius: 10,
     borderWidth: 2,
-    borderColor: '#6366f1',
+    borderColor: '#f43f5e',
   },
 
   supportButtonText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#6366f1',
+    color: '#f43f5e',
   },
 });
