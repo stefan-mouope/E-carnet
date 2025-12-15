@@ -112,17 +112,7 @@ export default function OnboardingScreen() {
 
       {/* FOOTER */}
       <View style={styles.footer}>
-        <View style={styles.footerBadges}>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🔒 Crypté E2E</Text>
-          </View>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>✓ RGPD</Text>
-          </View>
-          <View style={styles.footerBadge}>
-            <Text style={styles.footerBadgeText}>🇫🇷 France</Text>
-          </View>
-        </View>
+
         <Text style={styles.footerText}>© 2024 Topitoh - Tous droits réservés</Text>
       </View>
     </ScrollView>
@@ -136,12 +126,13 @@ const styles = StyleSheet.create({
   },
 
   scrollContent: {
-    paddingBottom: 30,
+    paddingBottom: 40,
   },
 
+  /* ================= HERO ================= */
   heroSection: {
-    paddingTop: 60,
-    paddingBottom: 40,
+    paddingTop: 72,
+    paddingBottom: 48,
     paddingHorizontal: 24,
     alignItems: 'center',
     position: 'relative',
@@ -150,177 +141,179 @@ const styles = StyleSheet.create({
 
   decorativeCircle1: {
     position: 'absolute',
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 220,
+    height: 220,
+    borderRadius: 110,
     backgroundColor: '#dbeafe',
-    opacity: 0.5,
-    top: -50,
-    right: -50,
+    opacity: 0.45,
+    top: -60,
+    right: -60,
   },
 
   decorativeCircle2: {
     position: 'absolute',
-    width: 150,
-    height: 150,
-    borderRadius: 75,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     backgroundColor: '#bfdbfe',
-    opacity: 0.4,
-    bottom: 0,
-    left: -30,
+    opacity: 0.35,
+    bottom: -10,
+    left: -40,
   },
 
   logoContainer: {
-    marginBottom: 24,
+    marginBottom: 28,
     zIndex: 1,
   },
 
   logoOuter: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: 128,
+    height: 128,
+    borderRadius: 64,
     backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#6366f1',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.28,
+    shadowRadius: 22,
     elevation: 10,
   },
 
   logoInner: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 104,
+    height: 104,
+    borderRadius: 52,
     backgroundColor: '#6366f1',
     justifyContent: 'center',
     alignItems: 'center',
   },
 
   appName: {
-    fontSize: 40,
+    fontSize: 42,
     fontWeight: '900',
-    color: '#1e293b',
-    marginBottom: 8,
-    letterSpacing: -1,
+    color: '#0f172a',
+    marginBottom: 10,
+    letterSpacing: -1.2,
   },
 
   tagline: {
-    fontSize: 17,
-    color: '#64748b',
+    fontSize: 16,
+    color: '#475569',
     textAlign: 'center',
-    marginBottom: 16,
+    marginBottom: 18,
     lineHeight: 24,
-    paddingHorizontal: 20,
+    paddingHorizontal: 28,
   },
 
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#f0fdf4',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
+    backgroundColor: '#ecfdf5',
+    paddingHorizontal: 18,
+    paddingVertical: 9,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#86efac',
+    borderColor: '#6ee7b7',
   },
 
   badgeText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '700',
-    color: '#10b981',
+    color: '#059669',
+    marginLeft: 6,
   },
 
+  /* ================= FEATURES ================= */
   featuresSection: {
     paddingHorizontal: 24,
-    paddingVertical: 30,
+    paddingVertical: 32,
   },
 
   featuresTitle: {
-    fontSize: 20,
+    fontSize: 21,
     fontWeight: '800',
-    color: '#1e293b',
+    color: '#0f172a',
     textAlign: 'center',
-    marginBottom: 24,
+    marginBottom: 26,
   },
 
   featuresGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
     justifyContent: 'space-between',
   },
 
   featureCard: {
     width: '48%',
     backgroundColor: '#ffffff',
-    borderRadius: 16,
-    padding: 16,
+    borderRadius: 18,
+    padding: 18,
+    marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#e5e7eb',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
   },
 
   featureIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
+    width: 52,
+    height: 52,
+    borderRadius: 14,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 14,
   },
 
   featureTitle: {
     fontSize: 15,
     fontWeight: '700',
-    color: '#1e293b',
+    color: '#0f172a',
     marginBottom: 6,
   },
 
   featureText: {
     fontSize: 12,
-    color: '#64748b',
+    color: '#475569',
     lineHeight: 18,
   },
 
+  /* ================= CTA ================= */
   ctaSection: {
     paddingHorizontal: 24,
-    paddingTop: 10,
+    paddingTop: 12,
   },
 
   ctaCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 20,
-    padding: 20,
+    borderRadius: 22,
+    padding: 22,
     borderWidth: 2,
-    borderColor: '#e2e8f0',
+    borderColor: '#e5e7eb',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.1,
+    shadowRadius: 14,
+    elevation: 5,
   },
 
   doctorCard: {
     borderColor: '#c7d2fe',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#f8fafc',
   },
 
   ctaHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 14,
-    marginBottom: 16,
+    marginBottom: 18,
   },
 
   ctaEmoji: {
-    fontSize: 36,
+    fontSize: 38,
+    marginRight: 14,
   },
 
   ctaTextContainer: {
@@ -330,34 +323,34 @@ const styles = StyleSheet.create({
   ctaTitle: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#1e293b',
+    color: '#0f172a',
     marginBottom: 4,
   },
 
   ctaSubtitle: {
     fontSize: 13,
-    color: '#64748b',
+    color: '#475569',
     lineHeight: 18,
   },
 
   primaryButton: {
     backgroundColor: '#6366f1',
-    height: 52,
-    borderRadius: 14,
+    height: 54,
+    borderRadius: 16,
   },
 
   secondaryButton: {
     borderWidth: 2,
     borderColor: '#6366f1',
     backgroundColor: '#ffffff',
-    height: 52,
-    borderRadius: 14,
+    height: 54,
+    borderRadius: 16,
   },
 
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginVertical: 22,
   },
 
   dividerLine: {
@@ -367,40 +360,42 @@ const styles = StyleSheet.create({
   },
 
   dividerText: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#94a3b8',
     marginHorizontal: 16,
   },
 
+  /* ================= FOOTER ================= */
   footer: {
     paddingHorizontal: 24,
-    paddingTop: 30,
-    paddingBottom: 10,
+    paddingTop: 32,
+    paddingBottom: 12,
     alignItems: 'center',
   },
 
   footerBadges: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 8,
     justifyContent: 'center',
-    marginBottom: 16,
+    marginBottom: 18,
   },
 
   footerBadge: {
     backgroundColor: '#ffffff',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 7,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#e2e8f0',
+    borderColor: '#e5e7eb',
+    marginHorizontal: 4,
+    marginVertical: 4,
   },
 
   footerBadgeText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#64748b',
+    color: '#475569',
   },
 
   footerText: {
