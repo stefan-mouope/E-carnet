@@ -95,7 +95,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="Dr. Jean Dupont"
+                placeholder="Dr. Larissa"
                 value={name}
                 onChangeText={setName}
                 style={styles.styledInput}
@@ -131,7 +131,7 @@ export default function RegisterDoctorScreen() {
             <View style={styles.inputWrapper}>
               <Input
                 label=""
-                placeholder="dr.dupont"
+                placeholder="Dr. Larissa"
                 value={username}
                 onChangeText={setUsername}
                 autoCapitalize="none"
@@ -206,9 +206,6 @@ export default function RegisterDoctorScreen() {
           <Text style={styles.privacyIcon}>🔐</Text>
           <View style={styles.privacyContent}>
             <Text style={styles.privacyTitle}>Vos données sont protégées</Text>
-            <Text style={styles.privacyText}>
-              Cryptage de bout en bout • Conformité RGPD • Normes médicales
-            </Text>
           </View>
         </View>
 

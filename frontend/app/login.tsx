@@ -197,15 +197,6 @@ export default function LoginScreen() {
           )}
         </View>
 
-        {/* AIDE */}
-        <View style={styles.supportSection}>
-          <View style={styles.supportCard}>
-            <Text style={styles.supportQuestion}>Besoin d'aide ?</Text>
-            <TouchableOpacity style={styles.supportButton}>
-              <Text style={styles.supportButtonText}>💬 Contacter le support</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
